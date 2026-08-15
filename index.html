@@ -326,7 +326,6 @@
                                     <option value="BRL">🇧🇷 BRL — Brazilian Real</option>
                                     <option value="JPY">🇯🇵 JPY — Japanese Yen</option>
                                     <option value="TRY">🇹🇷 TRY — Turkish Lira</option>
-                                    <option value="LKR">🇱🇰 LKR — Sri Lankan Rupee</option>
                                 </select>
                             </div>
 
@@ -341,7 +340,6 @@
                                     <option value="BRL">🇧🇷 BRL — Brazilian Real</option>
                                     <option value="JPY">🇯🇵 JPY — Japanese Yen</option>
                                     <option value="TRY">🇹🇷 TRY — Turkish Lira</option>
-                                    <option value="LKR">🇱🇰 LKR — Sri Lankan Rupee</option>
                                 </select>
                             </div>
 
@@ -778,14 +776,12 @@
         BRL: 6.3540,
         JPY: 191.4800,
         TRY: 42.8150,
-        LKR: 385.5000,
     };
 
     /* Currency symbols for formatting */
     const CURRENCY_SYMBOLS = {
         GBP: '£', USD: '$', EUR: '€',
         BRL: 'R$', JPY: '¥', TRY: '₺',
-        LKR: 'Rs. ',
     };
 
     /* =============================================================
@@ -1459,41 +1455,46 @@
     }
 
     /* =============================================================
-       10. MODULE C: CLIENT MANAGEMENT (localStorage CRUD)
+       10. MODULE C: CLIENT MANAGEMENT (MySQL Database API + Offline Fallback)
        ============================================================= */
 
+    // Memory cache for active client list
+    let cachedClients = [];
+
     /**
-     * Load clients from localStorage.
-     * @returns {Array} Array of client objects.
+     * Load clients from MySQL DB via api.php or fallback to local cache.
+     * @returns {Promise<Array>} Array of client objects.
      */
-    function loadClients() {
+    async function loadClients() {
         try {
-            const data = localStorage.getItem('enomy_clients');
-            return data ? JSON.parse(data) : [];
+            const res = await fetch('api.php?action=getClients');
+            if (res.ok) {
+                const json = await res.json();
+                if (json.status === 'success') {
+                    cachedClients = json.data;
+                    localStorage.setItem('enomy_clients_cache', JSON.stringify(cachedClients));
+                    logDiagnostic(`Fetched ${cachedClients.length} client(s) directly from MySQL database (Customer table).`, 'success');
+                    return cachedClients;
+                }
+            }
+            throw new Error(res.statusText || 'API response error');
         } catch (err) {
-            logDiagnostic(`Failed to load clients from localStorage: ${err.message}`, 'error');
-            return [];
+            logDiagnostic(`MySQL DB API offline or unreachable (${err.message}). Operating in local cache mode.`, 'warn');
+            const data = localStorage.getItem('enomy_clients_cache') || localStorage.getItem('enomy_clients');
+            cachedClients = data ? JSON.parse(data) : [
+                { id: 'CL-101', name: 'John Doe', email: 'john.doe@enomy-client.com', phone: '+44 7700 900101', txCount: 1 },
+                { id: 'CL-102', name: 'Jane Smith', email: 'jane.smith@enomy-client.com', phone: '+44 7700 900102', txCount: 1 }
+            ];
+            return cachedClients;
         }
     }
 
     /**
-     * Save clients array to localStorage.
-     * @param {Array} clients - Array of client objects.
+     * Render the client table asynchronously.
      */
-    function persistClients(clients) {
+    async function renderClients() {
         try {
-            localStorage.setItem('enomy_clients', JSON.stringify(clients));
-        } catch (err) {
-            logDiagnostic(`Failed to save clients to localStorage: ${err.message}`, 'error');
-        }
-    }
-
-    /**
-     * Render the client table from localStorage data.
-     */
-    function renderClients() {
-        try {
-            const clients = loadClients();
+            const clients = await loadClients();
             const tbody = document.getElementById('clientTableBody');
             const emptyState = document.getElementById('clientsEmpty');
 
@@ -1567,12 +1568,11 @@
     }
 
     /**
-     * Open the client modal pre-filled for editing.
+     * Open client modal pre-filled for editing.
      * @param {string} clientId - The ID of the client to edit.
      */
     function editClient(clientId) {
-        const clients = loadClients();
-        const client = clients.find(c => c.id === clientId);
+        const client = cachedClients.find(c => c.id === clientId);
         if (!client) return;
 
         document.getElementById('clientModal').classList.remove('hidden');
@@ -1594,9 +1594,9 @@
     }
 
     /**
-     * Save or update a client from the modal form.
+     * Save or update a client to MySQL database via api.php or local cache.
      */
-    function saveClient() {
+    async function saveClient() {
         try {
             const name = document.getElementById('clientName').value.trim();
             const email = document.getElementById('clientEmail').value.trim();
@@ -1605,14 +1605,12 @@
             const errorDiv = document.getElementById('modalError');
             const errorMsg = document.getElementById('modalErrorMsg');
 
-            // Validate
             if (!name || !email || !phone) {
                 errorDiv.classList.remove('hidden');
                 errorMsg.textContent = 'All fields are required.';
                 return;
             }
 
-            // Basic email validation
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 errorDiv.classList.remove('hidden');
                 errorMsg.textContent = 'Please enter a valid email address.';
@@ -1621,33 +1619,38 @@
 
             errorDiv.classList.add('hidden');
 
-            let clients = loadClients();
+            try {
+                const res = await fetch('api.php?action=saveClient', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: editId, name, email, phone })
+                });
 
-            if (editId) {
-                // Update existing client
-                const idx = clients.findIndex(c => c.id === editId);
-                if (idx !== -1) {
-                    clients[idx].name = name;
-                    clients[idx].email = email;
-                    clients[idx].phone = phone;
-                    logDiagnostic(`Client updated: ${name} (${editId})`, 'info');
+                if (res.ok) {
+                    const json = await res.json();
+                    if (json.status === 'success') {
+                        logDiagnostic(`Client saved to MySQL DB (${json.id || editId}): ${name}`, 'success');
+                    }
+                } else {
+                    throw new Error('HTTP ' + res.status);
                 }
-            } else {
-                // Add new client
-                const newClient = {
-                    id: generateClientId(),
-                    name,
-                    email,
-                    phone,
-                    txCount: 0,
-                    createdAt: getTimestamp(),
-                };
-                clients.push(newClient);
-                logDiagnostic(`New client added: ${name} (${newClient.id})`, 'success');
+            } catch (apiErr) {
+                logDiagnostic(`API save failed (${apiErr.message}). Saving to local cache mode.`, 'warn');
+                if (editId) {
+                    const idx = cachedClients.findIndex(c => c.id === editId);
+                    if (idx !== -1) {
+                        cachedClients[idx].name = name;
+                        cachedClients[idx].email = email;
+                        cachedClients[idx].phone = phone;
+                    }
+                } else {
+                    const newId = generateClientId();
+                    cachedClients.push({ id: newId, name, email, phone, txCount: 0, createdAt: getTimestamp() });
+                }
+                localStorage.setItem('enomy_clients_cache', JSON.stringify(cachedClients));
             }
 
-            persistClients(clients);
-            renderClients();
+            await renderClients();
             closeClientModal();
         } catch (err) {
             logDiagnostic(`Client save error: ${err.message}`, 'error');
@@ -1655,40 +1658,61 @@
     }
 
     /**
-     * Delete a client by ID with confirmation.
+     * Delete a client from MySQL DB via api.php or local cache.
      * @param {string} clientId - The client ID to delete.
      */
-    function deleteClient(clientId) {
+    async function deleteClient(clientId) {
         if (!confirm('Are you sure you want to delete this client? This action cannot be undone.')) return;
 
         try {
-            let clients = loadClients();
-            const client = clients.find(c => c.id === clientId);
-            clients = clients.filter(c => c.id !== clientId);
-            persistClients(clients);
-            renderClients();
-            logDiagnostic(`Client deleted: ${client?.name || clientId}`, 'warn');
+            try {
+                const res = await fetch('api.php?action=deleteClient', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: clientId })
+                });
+                if (res.ok) {
+                    logDiagnostic(`Client deleted from MySQL DB: ${clientId}`, 'warn');
+                }
+            } catch (apiErr) {
+                logDiagnostic(`API delete failed (${apiErr.message}). Deleting from local cache.`, 'warn');
+                cachedClients = cachedClients.filter(c => c.id !== clientId);
+                localStorage.setItem('enomy_clients_cache', JSON.stringify(cachedClients));
+            }
+
+            await renderClients();
         } catch (err) {
             logDiagnostic(`Client deletion error: ${err.message}`, 'error');
         }
     }
 
     /**
-     * Increment the transaction count for a client.
+     * Record a transaction for a client in the MySQL database.
      * @param {string} clientId - The client ID.
      */
-    function incrementTx(clientId) {
+    async function incrementTx(clientId) {
         try {
-            let clients = loadClients();
-            const client = clients.find(c => c.id === clientId);
-            if (client) {
-                client.txCount = (client.txCount || 0) + 1;
-                persistClients(clients);
-                renderClients();
-                logDiagnostic(`Transaction recorded for client ${client.name}: TX#${client.txCount}`, 'info');
+            try {
+                const res = await fetch('api.php?action=addTransaction', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ customerID: clientId, initialCurrency: 'GBP', targetCurrency: 'USD', amount: 500, feeApplied: 0.027, finalAmount: 619.22 })
+                });
+                if (res.ok) {
+                    logDiagnostic(`Transaction logged in MySQL Transaction table for client ${clientId}`, 'success');
+                }
+            } catch (apiErr) {
+                logDiagnostic(`API transaction insert failed (${apiErr.message}). Incrementing in local cache.`, 'warn');
+                const client = cachedClients.find(c => c.id === clientId);
+                if (client) {
+                    client.txCount = (client.txCount || 0) + 1;
+                    localStorage.setItem('enomy_clients_cache', JSON.stringify(cachedClients));
+                }
             }
+
+            await renderClients();
         } catch (err) {
-            logDiagnostic(`Transaction increment error: ${err.message}`, 'error');
+            logDiagnostic(`Transaction error: ${err.message}`, 'error');
         }
     }
 
