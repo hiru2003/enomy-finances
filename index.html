@@ -1,420 +1,117 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enomy-Finances | Secure Financial Platform</title>
-    <meta name="description" content="Enomy-Finances — a secure, institutional-grade financial platform for currency conversion, savings & investment planning, and client management.">
-
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out forwards',
-                        'slide-up': 'slideUp 0.4s ease-out forwards',
-                        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
-                        'glow': 'glow 2s ease-in-out infinite alternate',
-                    },
-                }
-            }
-        }
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } };
     </script>
-
-    <!-- Google Font: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* ============================================================
-           GLOBAL STYLES & ANIMATIONS
-           ============================================================ */
-        * { box-sizing: border-box; }
-        body { font-family: 'Inter', system-ui, sans-serif; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes pulseSoft {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-        @keyframes glow {
-            from { box-shadow: 0 0 5px rgba(59, 130, 246, 0.3), 0 0 10px rgba(59, 130, 246, 0.1); }
-            to { box-shadow: 0 0 15px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.2); }
-        }
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
-
-        /* Custom scrollbar for dark theme */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #1e293b; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-
-        /* Diagnostic console styling */
-        #diagnosticConsole {
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 0.8rem;
-            line-height: 1.6;
-            background: #0c0e14;
-            position: relative;
-            overflow: hidden;
-        }
-        #diagnosticConsole::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0;
-            height: 200%; opacity: 0.03;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.08) 2px, rgba(255,255,255,0.08) 4px);
-            animation: scanline 8s linear infinite;
-            pointer-events: none;
-        }
-
-        /* Gradient text */
-        .gradient-text {
-            background: linear-gradient(135deg, #3b82f6, #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Glass card effect */
-        .glass-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(71, 85, 105, 0.4);
-        }
-
-        /* Tab active indicator */
-        .tab-active {
-            background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(16,185,129,0.1));
-            border-color: #3b82f6;
-            color: #3b82f6;
-        }
-
-        /* Modal backdrop */
-        .modal-backdrop {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-        }
-
-        /* Input focus glow */
-        input:focus, select:focus {
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
-        }
-
-        /* Offline banner */
-        .offline-banner {
-            background: linear-gradient(90deg, #92400e, #a16207, #92400e);
-            background-size: 200% 100%;
-            animation: shimmer 3s ease-in-out infinite;
-        }
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+        ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:#1e293b} ::-webkit-scrollbar-thumb{background:#475569;border-radius:3px}
+        .glass-card{background:rgba(30,41,59,0.6);backdrop-filter:blur(12px);border:1px solid rgba(71,85,105,0.4)}
+        .gradient-text{background:linear-gradient(135deg,#3b82f6,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .tab-active{background:linear-gradient(135deg,rgba(59,130,246,0.15),rgba(16,185,129,0.1));border-color:#3b82f6;color:#3b82f6}
+        .modal-backdrop{background:rgba(0,0,0,0.7);backdrop-filter:blur(4px)}
+        #diagnosticConsole{font-family:'JetBrains Mono',monospace;font-size:0.8rem;line-height:1.6;background:#0c0e14;position:relative;overflow:hidden}
+        .offline-banner{background:linear-gradient(90deg,#92400e,#a16207,#92400e);background-size:200% 100%;animation:shimmer 3s ease-in-out infinite}
+        @keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
     </style>
 </head>
-
 <body class="bg-slate-950 text-slate-200 min-h-screen antialiased">
-
-    <!-- ============================================================
-         OFFLINE WARNING BANNER (Hidden by default)
-         ============================================================ -->
-    <div id="offlineBanner" class="hidden offline-banner fixed top-0 left-0 right-0 z-50 px-4 py-2.5 text-center text-yellow-100 font-semibold text-sm flex items-center justify-center gap-2">
-        <i data-lucide="wifi-off" class="w-4 h-4"></i>
-        <span>⚠ Network Failure Detected — Operating in Offline Mode. Data is being cached locally.</span>
+    <!-- Offline Banner -->
+    <div id="offlineBanner" class="hidden offline-banner fixed top-0 left-0 right-0 z-50 px-4 py-2 text-center text-yellow-100 font-semibold text-sm flex items-center justify-center gap-2">
+        <i data-lucide="wifi-off" class="w-4 h-4"></i><span>⚠ Network Failure Detected — Operating in Offline Mode (Caching Locally)</span>
     </div>
 
-    <!-- ============================================================
-         NAVIGATION BAR
-         ============================================================ -->
+    <!-- Navigation Bar -->
     <nav id="mainNav" class="fixed top-0 left-0 right-0 z-40 glass-card border-b border-slate-700/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center">
-                        <i data-lucide="landmark" class="w-5 h-5 text-white"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-lg font-bold gradient-text tracking-tight">Enomy-Finances</h1>
-                        <p class="text-[10px] text-slate-500 -mt-0.5 tracking-widest uppercase">Institutional Platform</p>
-                    </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center"><i data-lucide="landmark" class="w-5 h-5 text-white"></i></div>
+                <div><h1 class="text-lg font-bold gradient-text tracking-tight">Enomy-Finances</h1><p class="text-[10px] text-slate-500 -mt-0.5 uppercase tracking-widest">Institutional Platform</p></div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div id="systemStatusBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/60 border border-slate-700/50 text-xs">
+                    <span id="statusDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span id="statusText" class="text-slate-400 font-medium">Online</span>
                 </div>
-
-                <!-- Right Side: Status + User Badge -->
-                <div class="flex items-center gap-4">
-                    <!-- System Status Indicator -->
-                    <div id="systemStatusBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/60 border border-slate-700/50 text-xs">
-                        <span id="statusDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-soft"></span>
-                        <span id="statusText" class="text-slate-400 font-medium">Online</span>
-                    </div>
-
-                    <!-- User Badge (hidden until login) -->
-                    <div id="userBadge" class="hidden flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-800/60 border border-slate-700/50">
-                        <div class="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center">
-                            <i data-lucide="user" class="w-3.5 h-3.5 text-white"></i>
-                        </div>
-                        <div class="text-xs">
-                            <p class="font-semibold text-slate-200">Advisor</p>
-                            <p class="text-slate-500 text-[10px]">advisor@enomy.com</p>
-                        </div>
-                    </div>
+                <div id="userBadge" class="hidden flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-800/60 border border-slate-700/50">
+                    <div class="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center"><i data-lucide="user" class="w-3.5 h-3.5 text-white"></i></div>
+                    <div class="text-xs"><p class="font-semibold text-slate-200">Advisor</p><p class="text-slate-500 text-[10px]">advisor@enomy.com</p></div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- ============================================================
-         MAIN APPLICATION CONTAINER
-         ============================================================ -->
+    <!-- Main Container -->
     <main id="appContainer" class="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-
-        <!-- ========================================================
-             AUTHENTICATION VIEW
-             ======================================================== -->
-        <section id="authView" class="flex items-center justify-center min-h-[80vh] animate-fade-in">
-            <div class="w-full max-w-md">
-                <!-- Auth Card -->
-                <div class="glass-card rounded-2xl p-8 shadow-2xl shadow-blue-500/5">
-                    <!-- Header -->
-                    <div class="text-center mb-8">
-                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center mx-auto mb-4 animate-glow">
-                            <i data-lucide="shield-check" class="w-8 h-8 text-white"></i>
-                        </div>
-                        <h2 class="text-2xl font-bold text-white mb-1">Secure Login</h2>
-                        <p class="text-slate-400 text-sm">Authenticate to access the financial platform</p>
-                    </div>
-
-                    <!-- Login Error Alert -->
-                    <div id="loginError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2">
-                        <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
-                        <span id="loginErrorMsg">Invalid credentials. Please try again.</span>
-                    </div>
-
-                    <!-- Lockout Alert -->
-                    <div id="lockoutAlert" class="hidden mb-4 p-4 rounded-lg bg-red-600/20 border border-red-500/50 text-red-300 text-sm">
-                        <div class="flex items-center gap-2 mb-1 font-semibold">
-                            <i data-lucide="lock" class="w-4 h-4"></i>
-                            <span>Account Locked</span>
-                        </div>
-                        <p class="text-red-400 text-xs">Maximum login attempts exceeded. Your account has been locked for security. Contact your system administrator.</p>
-                    </div>
-
-                    <!-- Login Form -->
-                    <form id="loginForm" onsubmit="return false;" class="space-y-4">
-                        <div>
-                            <label for="loginEmail" class="block text-sm font-medium text-slate-300 mb-1.5">Email Address</label>
-                            <div class="relative">
-                                <i data-lucide="mail" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
-                                <input type="email" id="loginEmail" placeholder="advisor@enomy.com"
-                                    class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 transition-all duration-200">
-                            </div>
-                        </div>
-                        <div>
-                            <label for="loginPassword" class="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
-                            <div class="relative">
-                                <i data-lucide="key-round" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
-                                <input type="password" id="loginPassword" placeholder="••••••••••••"
-                                    class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 transition-all duration-200">
-                            </div>
-                        </div>
-
-                        <!-- Attempt Counter -->
-                        <div id="attemptCounter" class="text-xs text-slate-500 text-right">
-                            Attempts remaining: <span id="attemptsLeft" class="text-slate-400 font-semibold">3</span>/3
-                        </div>
-
-                        <button type="submit" id="loginBtn" onclick="handleLogin()"
-                            class="w-full py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-none">
-                            <i data-lucide="log-in" class="w-4 h-4"></i>
-                            Sign In
-                        </button>
-                    </form>
-
-                    <!-- Footer -->
-                    <p class="text-center text-slate-600 text-xs mt-6">Protected by 256-bit encryption</p>
+        <!-- 1. AUTHENTICATION VIEW -->
+        <section id="authView" class="flex items-center justify-center min-h-[80vh]">
+            <div class="w-full max-w-md glass-card rounded-2xl p-8 shadow-2xl">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center mx-auto mb-4"><i data-lucide="shield-check" class="w-8 h-8 text-white"></i></div>
+                    <h2 class="text-2xl font-bold text-white mb-1">Secure Login</h2><p class="text-slate-400 text-sm">Authenticate to access platform</p>
                 </div>
+                <div id="loginError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i><span id="loginErrorMsg">Invalid credentials.</span></div>
+                <div id="lockoutAlert" class="hidden mb-4 p-4 rounded-lg bg-red-600/20 border border-red-500/50 text-red-300 text-sm"><div class="flex items-center gap-2 mb-1 font-semibold"><i data-lucide="lock" class="w-4 h-4"></i>Account Locked</div><p class="text-red-400 text-xs">3 failed attempts reached. Account locked for security.</p></div>
+                <form id="loginForm" onsubmit="return false;" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-1">Email Address</label>
+                        <div class="relative"><i data-lucide="mail" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i><input type="email" id="loginEmail" placeholder="advisor@enomy.com" class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none focus:border-blue-500"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-1">Password</label>
+                        <div class="relative"><i data-lucide="key-round" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i><input type="password" id="loginPassword" placeholder="••••••••••••" class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none focus:border-blue-500"></div>
+                    </div>
+                    <div id="attemptCounter" class="text-xs text-slate-500 text-right">Attempts left: <span id="attemptsLeft" class="text-slate-400 font-semibold">3</span>/3</div>
+                    <button type="submit" id="loginBtn" onclick="handleLogin()" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"><i data-lucide="log-in" class="w-4 h-4"></i>Sign In</button>
+                </form>
             </div>
         </section>
 
-        <!-- ========================================================
-             DASHBOARD VIEW (Hidden until login)
-             ======================================================== -->
+        <!-- 2. DASHBOARD VIEW -->
         <section id="dashboardView" class="hidden">
+            <div class="mb-6"><h2 class="text-2xl font-bold text-white">Financial Dashboard</h2><p class="text-slate-400 text-sm mt-1">Manage conversions, savings, clients, and system health</p></div>
 
-            <!-- Dashboard Header -->
-            <div class="mb-6 animate-fade-in">
-                <h2 class="text-2xl font-bold text-white">Financial Dashboard</h2>
-                <p class="text-slate-400 text-sm mt-1">Manage conversions, investments, clients, and system health</p>
-            </div>
-
-            <!-- Tab Navigation -->
+            <!-- Tabs -->
             <div class="flex flex-wrap gap-2 mb-6 p-1.5 rounded-xl bg-slate-900/50 border border-slate-800/60">
-                <button onclick="switchTab('converter')" id="tab-converter"
-                    class="tab-btn tab-active flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 border border-transparent">
-                    <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
-                    Currency Converter
-                </button>
-                <button onclick="switchTab('savings')" id="tab-savings"
-                    class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-200 transition-all duration-300 border border-transparent">
-                    <i data-lucide="trending-up" class="w-4 h-4"></i>
-                    Savings & Investments
-                </button>
-                <button onclick="switchTab('clients')" id="tab-clients"
-                    class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-200 transition-all duration-300 border border-transparent">
-                    <i data-lucide="users" class="w-4 h-4"></i>
-                    Client Database
-                </button>
-                <button onclick="switchTab('diagnostics')" id="tab-diagnostics"
-                    class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-200 transition-all duration-300 border border-transparent">
-                    <i data-lucide="activity" class="w-4 h-4"></i>
-                    System Diagnostics
-                </button>
+                <button onclick="switchTab('converter')" id="tab-converter" class="tab-btn tab-active flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-transparent"><i data-lucide="arrow-left-right" class="w-4 h-4"></i>Currency Converter</button>
+                <button onclick="switchTab('savings')" id="tab-savings" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 border border-transparent"><i data-lucide="trending-up" class="w-4 h-4"></i>Savings & Investments</button>
+                <button onclick="switchTab('clients')" id="tab-clients" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 border border-transparent"><i data-lucide="users" class="w-4 h-4"></i>Client Database</button>
+                <button onclick="switchTab('diagnostics')" id="tab-diagnostics" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 border border-transparent"><i data-lucide="activity" class="w-4 h-4"></i>System Diagnostics</button>
             </div>
 
-            <!-- ====================================================
-                 TAB CONTENT: CURRENCY CONVERTER
-                 ==================================================== -->
-            <div id="panel-converter" class="tab-panel animate-slide-up">
+            <!-- PANEL: CURRENCY CONVERTER -->
+            <div id="panel-converter" class="tab-panel">
                 <div class="grid lg:grid-cols-2 gap-6">
-                    <!-- Left: Input Form -->
                     <div class="glass-card rounded-2xl p-6">
-                        <div class="flex items-center gap-2 mb-5">
-                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                                <i data-lucide="repeat" class="w-4 h-4 text-blue-400"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold text-white">Convert Currency</h3>
-                        </div>
-
-                        <!-- Converter Error Alert -->
-                        <div id="converterError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2">
-                            <i data-lucide="alert-triangle" class="w-4 h-4 flex-shrink-0"></i>
-                            <span id="converterErrorMsg"></span>
-                        </div>
-
+                        <div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center"><i data-lucide="repeat" class="w-4 h-4 text-blue-400"></i></div><h3 class="text-lg font-semibold text-white">Convert Currency</h3></div>
+                        <div id="converterError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2"><i data-lucide="alert-triangle" class="w-4 h-4"></i><span id="converterErrorMsg"></span></div>
                         <div class="space-y-4">
-                            <!-- From Currency -->
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-1.5">From Currency</label>
-                                <select id="fromCurrency"
-                                    class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none focus:border-blue-500 transition-all">
-                                    <option value="GBP">🇬🇧 GBP — British Pound</option>
-                                    <option value="USD">🇺🇸 USD — US Dollar</option>
-                                    <option value="EUR">🇪🇺 EUR — Euro</option>
-                                    <option value="BRL">🇧🇷 BRL — Brazilian Real</option>
-                                    <option value="JPY">🇯🇵 JPY — Japanese Yen</option>
-                                    <option value="TRY">🇹🇷 TRY — Turkish Lira</option>
-                                </select>
-                            </div>
-
-                            <!-- To Currency -->
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-1.5">To Currency</label>
-                                <select id="toCurrency"
-                                    class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none focus:border-blue-500 transition-all">
-                                    <option value="GBP">🇬🇧 GBP — British Pound</option>
-                                    <option value="USD" selected>🇺🇸 USD — US Dollar</option>
-                                    <option value="EUR">🇪🇺 EUR — Euro</option>
-                                    <option value="BRL">🇧🇷 BRL — Brazilian Real</option>
-                                    <option value="JPY">🇯🇵 JPY — Japanese Yen</option>
-                                    <option value="TRY">🇹🇷 TRY — Turkish Lira</option>
-                                </select>
-                            </div>
-
-                            <!-- Amount -->
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-1.5">Amount <span class="text-slate-500 font-normal">(300 – 5,000)</span></label>
-                                <div class="relative">
-                                    <i data-lucide="banknote" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
-                                    <input type="number" id="convertAmount" placeholder="Enter amount" min="300" max="5000" step="0.01"
-                                        class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 transition-all">
-                                </div>
-                            </div>
-
-                            <!-- Fee Info -->
-                            <div class="p-3 rounded-lg bg-slate-800/40 border border-slate-700/30">
-                                <p class="text-xs text-slate-500 mb-1.5 font-medium uppercase tracking-wider">Tiered Fee Schedule</p>
-                                <div class="grid grid-cols-2 gap-1 text-xs text-slate-400">
-                                    <span>Up to £500</span><span class="text-right text-blue-400">3.5%</span>
-                                    <span>£501 – £1,500</span><span class="text-right text-blue-400">2.7%</span>
-                                    <span>£1,501 – £2,500</span><span class="text-right text-blue-400">2.0%</span>
-                                    <span>Over £2,500</span><span class="text-right text-blue-400">1.5%</span>
-                                </div>
-                            </div>
-
-                            <button onclick="convertCurrency()" id="convertBtn"
-                                class="w-full py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/15 hover:shadow-blue-500/30">
-                                <i data-lucide="calculator" class="w-4 h-4"></i>
-                                Calculate Conversion
-                            </button>
+                            <div><label class="block text-sm font-medium text-slate-300 mb-1">From Currency</label><select id="fromCurrency" class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none"><option value="GBP">🇬🇧 GBP — British Pound</option><option value="USD">🇺🇸 USD — US Dollar</option><option value="EUR">🇪🇺 EUR — Euro</option><option value="BRL">🇧🇷 BRL — Brazilian Real</option><option value="JPY">🇯🇵 JPY — Japanese Yen</option><option value="TRY">🇹🇷 TRY — Turkish Lira</option></select></div>
+                            <div><label class="block text-sm font-medium text-slate-300 mb-1">To Currency</label><select id="toCurrency" class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none"><option value="GBP">🇬🇧 GBP — British Pound</option><option value="USD" selected>🇺🇸 USD — US Dollar</option><option value="EUR">🇪🇺 EUR — Euro</option><option value="BRL">🇧🇷 BRL — Brazilian Real</option><option value="JPY">🇯🇵 JPY — Japanese Yen</option><option value="TRY">🇹🇷 TRY — Turkish Lira</option></select></div>
+                            <div><label class="block text-sm font-medium text-slate-300 mb-1">Amount <span class="text-slate-500 font-normal">(300 – 5,000)</span></label><div class="relative"><i data-lucide="banknote" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i><input type="number" id="convertAmount" placeholder="Enter amount" min="300" max="5000" step="0.01" class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none"></div></div>
+                            <div class="p-3 rounded-lg bg-slate-800/40 border border-slate-700/30 text-xs text-slate-400 grid grid-cols-2 gap-1"><span class="col-span-2 text-slate-500 font-medium uppercase text-[10px]">Tiered Fee Schedule</span><span>Up to £500: 3.5%</span><span>£501–£1500: 2.7%</span><span>£1501–£2500: 2.0%</span><span>Over £2500: 1.5%</span></div>
+                            <button onclick="convertCurrency()" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white font-semibold text-sm flex items-center justify-center gap-2"><i data-lucide="calculator" class="w-4 h-4"></i>Calculate Conversion</button>
                         </div>
                     </div>
-
-                    <!-- Right: Conversion Receipt -->
                     <div class="glass-card rounded-2xl p-6">
-                        <div class="flex items-center gap-2 mb-5">
-                            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                                <i data-lucide="receipt" class="w-4 h-4 text-emerald-400"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold text-white">Conversion Receipt</h3>
-                        </div>
-
-                        <div id="receiptPlaceholder" class="flex flex-col items-center justify-center py-16 text-slate-500">
-                            <i data-lucide="file-text" class="w-12 h-12 mb-3 opacity-30"></i>
-                            <p class="text-sm">Enter details and convert to generate a receipt</p>
-                        </div>
-
+                        <div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center"><i data-lucide="receipt" class="w-4 h-4 text-emerald-400"></i></div><h3 class="text-lg font-semibold text-white">Conversion Receipt</h3></div>
+                        <div id="receiptPlaceholder" class="flex flex-col items-center justify-center py-16 text-slate-500"><i data-lucide="file-text" class="w-12 h-12 mb-3 opacity-30"></i><p class="text-sm">Enter details and convert to generate receipt</p></div>
                         <div id="receiptContent" class="hidden space-y-3">
-                            <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/40 space-y-3">
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-slate-400">Initial Amount</span>
-                                    <span id="rcptInitial" class="text-white font-semibold">—</span>
-                                </div>
+                            <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/40 space-y-3 text-sm">
+                                <div class="flex justify-between"><span class="text-slate-400">Initial Amount</span><span id="rcptInitial" class="text-white font-semibold">—</span></div>
                                 <div class="border-t border-slate-700/50"></div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-slate-400">Fee Rate Applied</span>
-                                    <span id="rcptFeeRate" class="text-yellow-400 font-semibold">—</span>
-                                </div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-slate-400">Fee Deducted</span>
-                                    <span id="rcptFeeAmt" class="text-red-400 font-semibold">—</span>
-                                </div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-slate-400">Amount After Fee</span>
-                                    <span id="rcptAfterFee" class="text-white font-semibold">—</span>
-                                </div>
+                                <div class="flex justify-between"><span class="text-slate-400">Fee Rate Applied</span><span id="rcptFeeRate" class="text-yellow-400 font-semibold">—</span></div>
+                                <div class="flex justify-between"><span class="text-slate-400">Fee Deducted</span><span id="rcptFeeAmt" class="text-red-400 font-semibold">—</span></div>
+                                <div class="flex justify-between"><span class="text-slate-400">Amount After Fee</span><span id="rcptAfterFee" class="text-white font-semibold">—</span></div>
                                 <div class="border-t border-slate-700/50"></div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-slate-400">Exchange Rate</span>
-                                    <span id="rcptRate" class="text-blue-400 font-semibold">—</span>
-                                </div>
+                                <div class="flex justify-between"><span class="text-slate-400">Exchange Rate</span><span id="rcptRate" class="text-blue-400 font-semibold">—</span></div>
                                 <div class="border-t border-dashed border-slate-600/50"></div>
-                                <div class="flex justify-between text-base pt-1">
-                                    <span class="text-slate-300 font-medium">Final Converted Amount</span>
-                                    <span id="rcptFinal" class="text-emerald-400 font-bold text-lg">—</span>
-                                </div>
+                                <div class="flex justify-between text-base pt-1"><span class="text-slate-300 font-medium">Final Converted Amount</span><span id="rcptFinal" class="text-emerald-400 font-bold text-lg">—</span></div>
                             </div>
                             <p id="rcptTimestamp" class="text-xs text-slate-600 text-right"></p>
                         </div>
@@ -422,1430 +119,412 @@
                 </div>
             </div>
 
-            <!-- ====================================================
-                 TAB CONTENT: SAVINGS & INVESTMENTS
-                 ==================================================== -->
+            <!-- PANEL: SAVINGS & INVESTMENTS -->
             <div id="panel-savings" class="tab-panel hidden">
                 <div class="grid lg:grid-cols-3 gap-6">
-                    <!-- Input Form -->
                     <div class="glass-card rounded-2xl p-6">
-                        <div class="flex items-center gap-2 mb-5">
-                            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                                <i data-lucide="piggy-bank" class="w-4 h-4 text-emerald-400"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold text-white">Investment Plan</h3>
-                        </div>
-
-                        <!-- Savings Error Alert -->
-                        <div id="savingsError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2">
-                            <i data-lucide="alert-triangle" class="w-4 h-4 flex-shrink-0"></i>
-                            <span id="savingsErrorMsg"></span>
-                        </div>
-
+                        <div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center"><i data-lucide="piggy-bank" class="w-4 h-4 text-emerald-400"></i></div><h3 class="text-lg font-semibold text-white">Investment Plan</h3></div>
+                        <div id="savingsError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2"><i data-lucide="alert-triangle" class="w-4 h-4"></i><span id="savingsErrorMsg"></span></div>
                         <div class="space-y-4">
-                            <!-- Plan Selection -->
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-1.5">Select Plan</label>
-                                <select id="savingsPlan" onchange="onPlanChange()"
-                                    class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none focus:border-blue-500 transition-all">
-                                    <option value="1">Option 1: Basic Saver</option>
-                                    <option value="2">Option 2: Plus</option>
-                                    <option value="3">Option 3: Managed Portfolio</option>
-                                </select>
-                            </div>
-
-                            <!-- Plan Details -->
-                            <div id="planDetails" class="p-3 rounded-lg bg-slate-800/40 border border-slate-700/30 text-xs text-slate-400 space-y-1">
-                                <!-- Dynamically populated -->
-                            </div>
-
-                            <!-- Initial Lump Sum -->
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-1.5">Initial Lump Sum (£)</label>
-                                <input type="number" id="initialLump" placeholder="0.00" step="0.01"
-                                    class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-                            </div>
-
-                            <!-- Monthly Investment -->
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-1.5">Monthly Investment (£)</label>
-                                <input type="number" id="monthlyInvest" placeholder="0.00" step="0.01"
-                                    class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 transition-all">
-                            </div>
-
-                            <button onclick="calculateSavings()" id="calcSavingsBtn"
-                                class="w-full py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/15">
-                                <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
-                                Calculate Returns
-                            </button>
+                            <div><label class="block text-sm font-medium text-slate-300 mb-1">Select Plan</label><select id="savingsPlan" onchange="onPlanChange()" class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none"><option value="1">Option 1: Basic Saver</option><option value="2">Option 2: Plus</option><option value="3">Option 3: Managed Portfolio</option></select></div>
+                            <div id="planDetails" class="p-3 rounded-lg bg-slate-800/40 border border-slate-700/30 text-xs text-slate-400 space-y-1"></div>
+                            <div><label class="block text-sm font-medium text-slate-300 mb-1">Initial Lump Sum (£)</label><input type="number" id="initialLump" placeholder="0.00" step="0.01" class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed"></div>
+                            <div><label class="block text-sm font-medium text-slate-300 mb-1">Monthly Investment (£)</label><input type="number" id="monthlyInvest" placeholder="0.00" step="0.01" class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none"></div>
+                            <button onclick="calculateSavings()" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white font-semibold text-sm flex items-center justify-center gap-2"><i data-lucide="bar-chart-3" class="w-4 h-4"></i>Calculate Returns</button>
                         </div>
                     </div>
-
-                    <!-- Results Table & Chart -->
                     <div class="lg:col-span-2 space-y-6">
-                        <!-- Results Table -->
                         <div class="glass-card rounded-2xl p-6">
-                            <div class="flex items-center gap-2 mb-5">
-                                <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                                    <i data-lucide="table-2" class="w-4 h-4 text-blue-400"></i>
-                                </div>
-                                <h3 class="text-lg font-semibold text-white">Projected Returns</h3>
-                            </div>
-
-                            <div id="savingsPlaceholder" class="flex flex-col items-center justify-center py-12 text-slate-500">
-                                <i data-lucide="bar-chart-2" class="w-12 h-12 mb-3 opacity-30"></i>
-                                <p class="text-sm">Configure a plan and calculate to view projections</p>
-                            </div>
-
+                            <div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center"><i data-lucide="table-2" class="w-4 h-4 text-blue-400"></i></div><h3 class="text-lg font-semibold text-white">Projected Returns</h3></div>
+                            <div id="savingsPlaceholder" class="flex flex-col items-center justify-center py-12 text-slate-500"><i data-lucide="bar-chart-2" class="w-12 h-12 mb-3 opacity-30"></i><p class="text-sm">Calculate to view projections</p></div>
                             <div id="savingsResults" class="hidden overflow-x-auto">
-                                <table class="w-full text-sm">
-                                    <thead>
-                                        <tr class="border-b border-slate-700/50">
-                                            <th class="text-left py-3 px-2 text-slate-400 font-medium">Timeframe</th>
-                                            <th class="text-right py-3 px-2 text-slate-400 font-medium">Est. Min Value</th>
-                                            <th class="text-right py-3 px-2 text-slate-400 font-medium">Est. Max Value</th>
-                                            <th class="text-right py-3 px-2 text-slate-400 font-medium">Total Profit</th>
-                                            <th class="text-right py-3 px-2 text-slate-400 font-medium">Fees Paid</th>
-                                            <th class="text-right py-3 px-2 text-slate-400 font-medium">Taxes Paid</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="savingsTableBody" class="divide-y divide-slate-800/50">
-                                        <!-- Dynamically filled -->
-                                    </tbody>
-                                </table>
+                                <table class="w-full text-sm"><thead><tr class="border-b border-slate-700/50"><th class="text-left py-3 px-2 text-slate-400 font-medium">Timeframe</th><th class="text-right py-3 px-2 text-slate-400 font-medium">Est. Min Value</th><th class="text-right py-3 px-2 text-slate-400 font-medium">Est. Max Value</th><th class="text-right py-3 px-2 text-slate-400 font-medium">Total Profit</th><th class="text-right py-3 px-2 text-slate-400 font-medium">Fees Paid</th><th class="text-right py-3 px-2 text-slate-400 font-medium">Taxes Paid</th></tr></thead><tbody id="savingsTableBody" class="divide-y divide-slate-800/50"></tbody></table>
                             </div>
                         </div>
-
-                        <!-- Chart -->
                         <div class="glass-card rounded-2xl p-6">
-                            <div class="flex items-center gap-2 mb-4">
-                                <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
-                                    <i data-lucide="line-chart" class="w-4 h-4 text-purple-400"></i>
-                                </div>
-                                <h3 class="text-lg font-semibold text-white">Growth Projection</h3>
-                            </div>
-                            <div id="chartPlaceholder" class="flex flex-col items-center justify-center py-12 text-slate-500">
-                                <i data-lucide="trending-up" class="w-12 h-12 mb-3 opacity-30"></i>
-                                <p class="text-sm">Chart will render after calculation</p>
-                            </div>
-                            <div id="chartContainer" class="hidden">
-                                <canvas id="savingsChart" height="220"></canvas>
-                            </div>
+                            <div class="flex items-center gap-2 mb-4"><div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center"><i data-lucide="line-chart" class="w-4 h-4 text-purple-400"></i></div><h3 class="text-lg font-semibold text-white">Growth Projection</h3></div>
+                            <div id="chartPlaceholder" class="flex flex-col items-center justify-center py-12 text-slate-500"><i data-lucide="trending-up" class="w-12 h-12 mb-3 opacity-30"></i><p class="text-sm">Chart renders after calculation</p></div>
+                            <div id="chartContainer" class="hidden"><canvas id="savingsChart" height="220"></canvas></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ====================================================
-                 TAB CONTENT: CLIENT DATABASE
-                 ==================================================== -->
+            <!-- PANEL: CLIENT DATABASE -->
             <div id="panel-clients" class="tab-panel hidden">
                 <div class="glass-card rounded-2xl p-6">
                     <div class="flex items-center justify-between mb-5">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                                <i data-lucide="contact-2" class="w-4 h-4 text-blue-400"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold text-white">Client Management</h3>
-                        </div>
-                        <button onclick="openClientModal()" id="addClientBtn"
-                            class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-all duration-200 shadow-lg shadow-blue-500/15">
-                            <i data-lucide="user-plus" class="w-4 h-4"></i>
-                            Add New Client
-                        </button>
+                        <div class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center"><i data-lucide="contact-2" class="w-4 h-4 text-blue-400"></i></div><h3 class="text-lg font-semibold text-white">Client Management</h3></div>
+                        <button onclick="openClientModal()" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium"><i data-lucide="user-plus" class="w-4 h-4"></i>Add New Client</button>
                     </div>
-
-                    <!-- Client Table -->
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
-                            <thead>
-                                <tr class="border-b border-slate-700/50">
-                                    <th class="text-left py-3 px-3 text-slate-400 font-medium">ID</th>
-                                    <th class="text-left py-3 px-3 text-slate-400 font-medium">Name</th>
-                                    <th class="text-left py-3 px-3 text-slate-400 font-medium">Email</th>
-                                    <th class="text-left py-3 px-3 text-slate-400 font-medium">Phone</th>
-                                    <th class="text-center py-3 px-3 text-slate-400 font-medium">TX Count</th>
-                                    <th class="text-center py-3 px-3 text-slate-400 font-medium">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="clientTableBody" class="divide-y divide-slate-800/50">
-                                <!-- Dynamically filled -->
-                            </tbody>
+                            <thead><tr class="border-b border-slate-700/50"><th class="text-left py-3 px-3 text-slate-400 font-medium">ID</th><th class="text-left py-3 px-3 text-slate-400 font-medium">Name</th><th class="text-left py-3 px-3 text-slate-400 font-medium">Email</th><th class="text-left py-3 px-3 text-slate-400 font-medium">Phone</th><th class="text-center py-3 px-3 text-slate-400 font-medium">TX Count</th><th class="text-center py-3 px-3 text-slate-400 font-medium">Actions</th></tr></thead>
+                            <tbody id="clientTableBody" class="divide-y divide-slate-800/50"></tbody>
                         </table>
-
-                        <!-- Empty State -->
-                        <div id="clientsEmpty" class="hidden flex flex-col items-center justify-center py-16 text-slate-500">
-                            <i data-lucide="users" class="w-12 h-12 mb-3 opacity-30"></i>
-                            <p class="text-sm">No clients registered. Click "Add New Client" to begin.</p>
-                        </div>
+                        <div id="clientsEmpty" class="hidden flex flex-col items-center justify-center py-16 text-slate-500"><i data-lucide="users" class="w-12 h-12 mb-3 opacity-30"></i><p class="text-sm">No clients registered.</p></div>
                     </div>
                 </div>
             </div>
 
-            <!-- ====================================================
-                 TAB CONTENT: SYSTEM DIAGNOSTICS
-                 ==================================================== -->
+            <!-- PANEL: SYSTEM DIAGNOSTICS -->
             <div id="panel-diagnostics" class="tab-panel hidden">
                 <div class="grid lg:grid-cols-3 gap-6">
-                    <!-- Controls -->
                     <div class="glass-card rounded-2xl p-6">
-                        <div class="flex items-center gap-2 mb-5">
-                            <div class="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center">
-                                <i data-lucide="settings" class="w-4 h-4 text-yellow-400"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold text-white">System Controls</h3>
-                        </div>
-
+                        <div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center"><i data-lucide="settings" class="w-4 h-4 text-yellow-400"></i></div><h3 class="text-lg font-semibold text-white">System Controls</h3></div>
                         <div class="space-y-3">
-                            <!-- System Stats -->
-                            <div class="p-3 rounded-lg bg-slate-800/40 border border-slate-700/30 space-y-2">
-                                <div class="flex justify-between text-xs">
-                                    <span class="text-slate-500">Uptime</span>
-                                    <span id="sysUptime" class="text-emerald-400 font-mono">00:00:00</span>
-                                </div>
-                                <div class="flex justify-between text-xs">
-                                    <span class="text-slate-500">Session Events</span>
-                                    <span id="sysEventCount" class="text-blue-400 font-mono">0</span>
-                                </div>
-                                <div class="flex justify-between text-xs">
-                                    <span class="text-slate-500">Network Status</span>
-                                    <span id="sysNetStatus" class="text-emerald-400 font-mono">Connected</span>
-                                </div>
-                                <div class="flex justify-between text-xs">
-                                    <span class="text-slate-500">Local Storage</span>
-                                    <span id="sysStorage" class="text-slate-400 font-mono">Active</span>
-                                </div>
+                            <div class="p-3 rounded-lg bg-slate-800/40 border border-slate-700/30 space-y-2 text-xs">
+                                <div class="flex justify-between"><span class="text-slate-500">Uptime</span><span id="sysUptime" class="text-emerald-400 font-mono">00:00:00</span></div>
+                                <div class="flex justify-between"><span class="text-slate-500">Session Events</span><span id="sysEventCount" class="text-blue-400 font-mono">0</span></div>
+                                <div class="flex justify-between"><span class="text-slate-500">Network Status</span><span id="sysNetStatus" class="text-emerald-400 font-mono">Connected</span></div>
+                                <div class="flex justify-between"><span class="text-slate-500">Database API</span><span id="sysStorage" class="text-slate-400 font-mono">MySQL / Active</span></div>
                             </div>
-
-                            <!-- Simulate Failure Button -->
-                            <button onclick="simulateNetworkFailure()" id="simFailureBtn"
-                                class="w-full py-2.5 rounded-lg bg-gradient-to-r from-yellow-600/80 to-red-600/80 hover:from-yellow-500 hover:to-red-500 text-white font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2">
-                                <i data-lucide="wifi-off" class="w-4 h-4"></i>
-                                Simulate Network Failure
-                            </button>
-
-                            <!-- Restore Button -->
-                            <button onclick="restoreNetwork()" id="restoreNetBtn"
-                                class="hidden w-full py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2">
-                                <i data-lucide="wifi" class="w-4 h-4"></i>
-                                Restore Connection
-                            </button>
-
-                            <!-- Clear Logs -->
-                            <button onclick="clearDiagnostics()"
-                                class="w-full py-2.5 rounded-lg bg-slate-700/50 hover:bg-slate-700 text-slate-300 font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                Clear Logs
-                            </button>
+                            <button onclick="simulateNetworkFailure()" id="simFailureBtn" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-yellow-600/80 to-red-600/80 text-white font-semibold text-sm flex items-center justify-center gap-2"><i data-lucide="wifi-off" class="w-4 h-4"></i>Simulate Network Failure</button>
+                            <button onclick="restoreNetwork()" id="restoreNetBtn" class="hidden w-full py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 text-white font-semibold text-sm flex items-center justify-center gap-2"><i data-lucide="wifi" class="w-4 h-4"></i>Restore Connection</button>
+                            <button onclick="clearDiagnostics()" class="w-full py-2.5 rounded-lg bg-slate-700/50 text-slate-300 font-medium text-sm flex items-center justify-center gap-2"><i data-lucide="trash-2" class="w-4 h-4"></i>Clear Logs</button>
                         </div>
                     </div>
-
-                    <!-- Diagnostic Console -->
                     <div class="lg:col-span-2 glass-card rounded-2xl p-6">
-                        <div class="flex items-center gap-2 mb-4">
-                            <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
-                                <i data-lucide="terminal" class="w-4 h-4 text-green-400"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold text-white">Diagnostic Logs</h3>
-                            <span class="ml-auto text-xs text-slate-500 font-mono">v2.6.1</span>
-                        </div>
-
-                        <div id="diagnosticConsole" class="h-[420px] overflow-y-auto rounded-xl p-4 border border-slate-800/60">
-                            <div id="diagnosticLogs">
-                                <!-- Dynamically filled -->
-                            </div>
-                        </div>
+                        <div class="flex items-center gap-2 mb-4"><div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center"><i data-lucide="terminal" class="w-4 h-4 text-green-400"></i></div><h3 class="text-lg font-semibold text-white">Diagnostic Logs</h3><span class="ml-auto text-xs text-slate-500 font-mono">v2.6.1</span></div>
+                        <div id="diagnosticConsole" class="h-[420px] overflow-y-auto rounded-xl p-4 border border-slate-800/60"><div id="diagnosticLogs"></div></div>
                     </div>
                 </div>
             </div>
-
-        </section><!-- /dashboardView -->
-
+        </section>
     </main>
 
-    <!-- ============================================================
-         CLIENT MODAL (Hidden)
-         ============================================================ -->
+    <!-- CLIENT MODAL -->
     <div id="clientModal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
-        <div class="w-full max-w-lg glass-card rounded-2xl p-6 shadow-2xl animate-slide-up border border-slate-600/40">
+        <div class="w-full max-w-lg glass-card rounded-2xl p-6 border border-slate-600/40">
             <div class="flex items-center justify-between mb-5">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                        <i data-lucide="user-plus" class="w-4 h-4 text-blue-400"></i>
-                    </div>
-                    <h3 id="modalTitle" class="text-lg font-semibold text-white">Add New Client</h3>
-                </div>
-                <button onclick="closeClientModal()" class="w-8 h-8 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 flex items-center justify-center transition-colors">
-                    <i data-lucide="x" class="w-4 h-4 text-slate-400"></i>
-                </button>
+                <div class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center"><i data-lucide="user-plus" class="w-4 h-4 text-blue-400"></i></div><h3 id="modalTitle" class="text-lg font-semibold text-white">Add New Client</h3></div>
+                <button onclick="closeClientModal()" class="w-8 h-8 rounded-lg bg-slate-700/50 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-400"></i></button>
             </div>
-
-            <!-- Modal Error -->
-            <div id="modalError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2">
-                <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
-                <span id="modalErrorMsg"></span>
-            </div>
-
-            <form id="clientForm" class="space-y-4">
+            <div id="modalError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 text-red-400 text-sm flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4"></i><span id="modalErrorMsg"></span></div>
+            <form id="clientForm" class="space-y-4" onsubmit="return false;">
                 <input type="hidden" id="editClientId" value="">
-                <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1.5">Full Name</label>
-                    <input type="text" id="clientName" placeholder="John Doe" required
-                        class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 transition-all">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1.5">Email Address</label>
-                    <input type="email" id="clientEmail" placeholder="john@example.com" required
-                        class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 transition-all">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1.5">Phone Number</label>
-                    <input type="tel" id="clientPhone" placeholder="+44 7700 900000" required
-                        class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 transition-all">
-                </div>
+                <div><label class="block text-sm font-medium text-slate-300 mb-1">Full Name</label><input type="text" id="clientName" placeholder="John Doe" required class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none"></div>
+                <div><label class="block text-sm font-medium text-slate-300 mb-1">Email Address</label><input type="email" id="clientEmail" placeholder="john@example.com" required class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none"></div>
+                <div><label class="block text-sm font-medium text-slate-300 mb-1">Phone Number</label><input type="tel" id="clientPhone" placeholder="+44 7700 900000" required class="w-full px-4 py-2.5 rounded-lg bg-slate-800/80 border border-slate-600/50 text-slate-200 text-sm focus:outline-none"></div>
                 <div class="flex gap-3 pt-2">
-                    <button type="button" onclick="saveClient()"
-                        class="flex-1 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2">
-                        <i data-lucide="save" class="w-4 h-4"></i>
-                        <span id="modalSaveText">Save Client</span>
-                    </button>
-                    <button type="button" onclick="closeClientModal()"
-                        class="px-6 py-2.5 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-slate-300 font-medium text-sm transition-all duration-200">
-                        Cancel
-                    </button>
+                    <button type="button" onclick="saveClient()" class="flex-1 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-emerald-600 text-white font-semibold text-sm flex items-center justify-center gap-2"><i data-lucide="save" class="w-4 h-4"></i><span id="modalSaveText">Save Client</span></button>
+                    <button type="button" onclick="closeClientModal()" class="px-6 py-2.5 rounded-lg bg-slate-700/50 text-slate-300 font-medium text-sm">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
-
-    <!-- ============================================================
-         APPLICATION JAVASCRIPT
-         ============================================================ -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-    /* =============================================================
-       1. APPLICATION STATE
-       ============================================================= */
     const AppState = {
-        // EFSM Auth State
-        auth: {
-            isLoggedIn: false,
-            attempts: 0,
-            maxAttempts: 3,
-            isLocked: false,
-            validEmail: 'advisor@enomy.com',
-            validPassword: 'Finance2026!',
-        },
-
-        // Active tab tracker
+        auth: { isLoggedIn: false, attempts: 0, maxAttempts: 3, isLocked: false, validEmail: 'advisor@enomy.com', validPassword: 'Finance2026!' },
         activeTab: 'converter',
-
-        // Currency converter state (preserved across tab switches)
-        converter: {
-            fromCurrency: 'GBP',
-            toCurrency: 'USD',
-            amount: '',
-        },
-
-        // Savings state (preserved across tab switches)
-        savings: {
-            plan: '1',
-            lumpSum: '',
-            monthly: '',
-        },
-
-        // Network simulation
-        isOffline: false,
-
-        // Diagnostic logs
-        diagnosticLogs: [],
-        sessionStartTime: Date.now(),
-        eventCount: 0,
-
-        // Chart instance reference
-        chartInstance: null,
+        converter: { fromCurrency: 'GBP', toCurrency: 'USD', amount: '' },
+        savings: { plan: '1', lumpSum: '', monthly: '' },
+        isOffline: false, diagnosticLogs: [], sessionStartTime: Date.now(), eventCount: 0, chartInstance: null
     };
 
-    /* =============================================================
-       2. MOCK EXCHANGE RATES (Base: GBP)
-       ============================================================= */
-    const EXCHANGE_RATES_GBP = {
-        GBP: 1.0000,
-        USD: 1.2715,
-        EUR: 1.1692,
-        BRL: 6.3540,
-        JPY: 191.4800,
-        TRY: 42.8150,
-    };
-
-    /* Currency symbols for formatting */
-    const CURRENCY_SYMBOLS = {
-        GBP: '£', USD: '$', EUR: '€',
-        BRL: 'R$', JPY: '¥', TRY: '₺',
-    };
-
-    /* =============================================================
-       3. SAVINGS PLAN CONFIGURATIONS
-       ============================================================= */
+    const EXCHANGE_RATES_GBP = { GBP: 1.0000, USD: 1.2715, EUR: 1.1692, BRL: 6.3540, JPY: 191.4800, TRY: 42.8150 };
+    const CURRENCY_SYMBOLS = { GBP: '£', USD: '$', EUR: '€', BRL: 'R$', JPY: '¥', TRY: '₺' };
     const SAVINGS_PLANS = {
-        '1': {
-            name: 'Basic Saver',
-            lumpEnabled: false,
-            minLump: 0,
-            minMonthly: 50,
-            maxYearly: 20000,
-            minReturn: 0.012,
-            maxReturn: 0.024,
-            monthlyFee: 0.0025,
-            taxBands: [],  // No tax
-        },
-        '2': {
-            name: 'Plus',
-            lumpEnabled: true,
-            minLump: 300,
-            minMonthly: 50,
-            maxYearly: 30000,
-            minReturn: 0.03,
-            maxReturn: 0.055,
-            monthlyFee: 0.003,
-            taxBands: [
-                { threshold: 12000, rate: 0.10 },
-            ],
-        },
-        '3': {
-            name: 'Managed Portfolio',
-            lumpEnabled: true,
-            minLump: 1000,
-            minMonthly: 150,
-            maxYearly: Infinity,
-            minReturn: 0.04,
-            maxReturn: 0.23,
-            monthlyFee: 0.013,
-            taxBands: [
-                { threshold: 12000, rate: 0.10 },
-                { threshold: 40000, rate: 0.20 },
-            ],
-        },
+        '1': { name: 'Basic Saver', lumpEnabled: false, minLump: 0, minMonthly: 50, maxYearly: 20000, minReturn: 0.012, maxReturn: 0.024, monthlyFee: 0.0025, taxBands: [] },
+        '2': { name: 'Plus', lumpEnabled: true, minLump: 300, minMonthly: 50, maxYearly: 30000, minReturn: 0.03, maxReturn: 0.055, monthlyFee: 0.003, taxBands: [{ threshold: 12000, rate: 0.10 }] },
+        '3': { name: 'Managed Portfolio', lumpEnabled: true, minLump: 1000, minMonthly: 150, maxYearly: Infinity, minReturn: 0.04, maxReturn: 0.23, monthlyFee: 0.013, taxBands: [{ threshold: 12000, rate: 0.10 }, { threshold: 40000, rate: 0.20 }] }
     };
 
-    /* =============================================================
-       4. UTILITY FUNCTIONS
-       ============================================================= */
+    function formatCurrency(val, curr = 'GBP') { return (CURRENCY_SYMBOLS[curr] || '') + Number(val).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function getTimestamp() { return new Date().toISOString().replace('T', ' ').split('.')[0]; }
+    function generateClientId() { return 'ENM-' + Date.now().toString(36).toUpperCase().slice(-6); }
+    function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
 
-    /**
-     * Format a number to 2 decimal places with a currency symbol.
-     * @param {number} value - The numeric value.
-     * @param {string} [currency='GBP'] - Currency code.
-     * @returns {string} Formatted string e.g. "£1,234.56"
-     */
-    function formatCurrency(value, currency = 'GBP') {
-        const symbol = CURRENCY_SYMBOLS[currency] || '';
-        return symbol + Number(value).toLocaleString('en-GB', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        });
-    }
-
-    /**
-     * Get current timestamp string for logging.
-     * @returns {string} ISO-like timestamp
-     */
-    function getTimestamp() {
-        return new Date().toISOString().replace('T', ' ').split('.')[0];
-    }
-
-    /**
-     * Generate a unique ID for clients.
-     * @returns {string} Unique ID string
-     */
-    function generateClientId() {
-        return 'ENM-' + Date.now().toString(36).toUpperCase().slice(-6);
-    }
-
-    /* =============================================================
-       5. DIAGNOSTIC LOGGING SYSTEM
-       ============================================================= */
-
-    /**
-     * Log an event to the diagnostic console.
-     * @param {string} message - The log message.
-     * @param {'info'|'success'|'warn'|'error'|'critical'} level - Severity level.
-     */
-    function logDiagnostic(message, level = 'info') {
+    function logDiagnostic(msg, level = 'info') {
         try {
             AppState.eventCount++;
-            const timestamp = getTimestamp();
-            const entry = { timestamp, message, level };
-            AppState.diagnosticLogs.push(entry);
-
-            // Color mapping for log levels
-            const colors = {
-                info: 'text-blue-400',
-                success: 'text-emerald-400',
-                warn: 'text-yellow-400',
-                error: 'text-red-400',
-                critical: 'text-red-300 font-bold',
-            };
-            const prefixes = {
-                info: 'INFO',
-                success: ' OK ',
-                warn: 'WARN',
-                error: ' ERR',
-                critical: 'CRIT',
-            };
-
+            const ts = getTimestamp();
+            AppState.diagnosticLogs.push({ timestamp: ts, message: msg, level });
+            const colors = { info: 'text-blue-400', success: 'text-emerald-400', warn: 'text-yellow-400', error: 'text-red-400', critical: 'text-red-300 font-bold' };
+            const prefixes = { info: 'INFO', success: ' OK ', warn: 'WARN', error: ' ERR', critical: 'CRIT' };
             const logsContainer = document.getElementById('diagnosticLogs');
             if (logsContainer) {
-                const logLine = document.createElement('div');
-                logLine.className = 'flex gap-2 mb-0.5';
-                logLine.innerHTML = `
-                    <span class="text-slate-600 flex-shrink-0">[${timestamp}]</span>
-                    <span class="${colors[level]} flex-shrink-0">[${prefixes[level]}]</span>
-                    <span class="text-slate-300">${message}</span>
-                `;
-                logsContainer.appendChild(logLine);
-
-                // Auto-scroll to bottom
-                const console = document.getElementById('diagnosticConsole');
-                if (console) console.scrollTop = console.scrollHeight;
+                const line = document.createElement('div');
+                line.className = 'flex gap-2 mb-0.5';
+                line.innerHTML = `<span class="text-slate-600 flex-shrink-0">[${ts}]</span><span class="${colors[level]} flex-shrink-0">[${prefixes[level]}]</span><span class="text-slate-300">${msg}</span>`;
+                logsContainer.appendChild(line);
+                document.getElementById('diagnosticConsole').scrollTop = document.getElementById('diagnosticConsole').scrollHeight;
             }
-
-            // Update event counter in the UI
-            const eventCountEl = document.getElementById('sysEventCount');
-            if (eventCountEl) eventCountEl.textContent = AppState.eventCount;
-        } catch (e) {
-            console.error('Diagnostic logging error:', e);
-        }
+            if (document.getElementById('sysEventCount')) document.getElementById('sysEventCount').textContent = AppState.eventCount;
+        } catch (e) { console.error('Log error:', e); }
     }
 
-    /**
-     * Clear all diagnostic logs from the console.
-     */
     function clearDiagnostics() {
-        const logsContainer = document.getElementById('diagnosticLogs');
-        if (logsContainer) logsContainer.innerHTML = '';
-        AppState.diagnosticLogs = [];
-        logDiagnostic('Diagnostic logs cleared by user.', 'info');
+        document.getElementById('diagnosticLogs').innerHTML = ''; AppState.diagnosticLogs = []; logDiagnostic('Diagnostic logs cleared.', 'info');
     }
 
-    /* =============================================================
-       6. AUTHENTICATION — EFSM LOGIC
-       ============================================================= */
-
-    /**
-     * Handle login form submission with Extended Finite State Machine logic.
-     * Tracks attempts and locks account after 3 failures.
-     */
+    /* EFSM Authentication */
     function handleLogin() {
-        try {
-            // If locked, do nothing
-            if (AppState.auth.isLocked) return;
+        if (AppState.auth.isLocked) return;
+        const email = document.getElementById('loginEmail').value.trim();
+        const pass = document.getElementById('loginPassword').value;
+        const errDiv = document.getElementById('loginError');
+        const lockDiv = document.getElementById('lockoutAlert');
 
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const errorDiv = document.getElementById('loginError');
-            const errorMsg = document.getElementById('loginErrorMsg');
-            const lockoutDiv = document.getElementById('lockoutAlert');
-
-            // Validate credentials
-            if (email === AppState.auth.validEmail && password === AppState.auth.validPassword) {
-                // === SUCCESS STATE ===
-                AppState.auth.isLoggedIn = true;
-                errorDiv.classList.add('hidden');
-                lockoutDiv.classList.add('hidden');
-
-                // Hide auth, show dashboard
-                document.getElementById('authView').classList.add('hidden');
-                document.getElementById('dashboardView').classList.remove('hidden');
-                document.getElementById('userBadge').classList.remove('hidden');
-                document.getElementById('userBadge').classList.add('flex');
-
-                logDiagnostic('Authentication successful — advisor@enomy.com logged in.', 'success');
-                logDiagnostic('Dashboard modules initialised. Session active.', 'info');
-
-                // Initialize default tab state
-                onPlanChange();
-                renderClients();
-                lucide.createIcons();
-
+        if (email === AppState.auth.validEmail && pass === AppState.auth.validPassword) {
+            AppState.auth.isLoggedIn = true; errDiv.classList.add('hidden'); lockDiv.classList.add('hidden');
+            document.getElementById('authView').classList.add('hidden');
+            document.getElementById('dashboardView').classList.remove('hidden');
+            document.getElementById('userBadge').classList.remove('hidden'); document.getElementById('userBadge').classList.add('flex');
+            logDiagnostic('Authentication successful — advisor@enomy.com logged in.', 'success');
+            onPlanChange(); renderClients(); lucide.createIcons();
+        } else {
+            AppState.auth.attempts++;
+            const left = AppState.auth.maxAttempts - AppState.auth.attempts;
+            logDiagnostic(`Login attempt #${AppState.auth.attempts} failed for: ${email}`, 'warn');
+            if (left <= 0) {
+                AppState.auth.isLocked = true; errDiv.classList.add('hidden'); lockDiv.classList.remove('hidden');
+                document.getElementById('loginBtn').disabled = true; document.getElementById('loginEmail').disabled = true; document.getElementById('loginPassword').disabled = true;
+                document.getElementById('attemptsLeft').textContent = '0';
+                logDiagnostic('ACCOUNT LOCKED — 3 consecutive failed login attempts.', 'critical');
             } else {
-                // === FAILURE STATE ===
-                AppState.auth.attempts++;
-                const remaining = AppState.auth.maxAttempts - AppState.auth.attempts;
-
-                logDiagnostic(`Login attempt #${AppState.auth.attempts} failed for: ${email || '(empty)'}`, 'warn');
-
-                if (remaining <= 0) {
-                    // === LOCKED STATE ===
-                    AppState.auth.isLocked = true;
-                    errorDiv.classList.add('hidden');
-                    lockoutDiv.classList.remove('hidden');
-                    document.getElementById('loginBtn').disabled = true;
-                    document.getElementById('loginEmail').disabled = true;
-                    document.getElementById('loginPassword').disabled = true;
-                    document.getElementById('attemptsLeft').textContent = '0';
-
-                    logDiagnostic('ACCOUNT LOCKED — 3 consecutive failed login attempts. Security protocol engaged.', 'critical');
-                } else {
-                    // Show error, update remaining count
-                    errorDiv.classList.remove('hidden');
-                    errorMsg.textContent = `Invalid credentials. ${remaining} attempt${remaining === 1 ? '' : 's'} remaining.`;
-                    document.getElementById('attemptsLeft').textContent = remaining;
-                }
+                errDiv.classList.remove('hidden'); document.getElementById('loginErrorMsg').textContent = `Invalid credentials. ${left} attempt(s) left.`;
+                document.getElementById('attemptsLeft').textContent = left;
             }
-        } catch (err) {
-            logDiagnostic(`Authentication error: ${err.message}`, 'error');
         }
     }
 
-    // Allow Enter key to submit login form
-    document.addEventListener('DOMContentLoaded', () => {
-        const loginForm = document.getElementById('loginForm');
-        if (loginForm) {
-            loginForm.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleLogin();
-                }
-            });
-        }
-    });
-
-    /* =============================================================
-       7. TAB NAVIGATION (State Preserved)
-       ============================================================= */
-
-    /**
-     * Switch between dashboard tabs. Preserves user input state.
-     * @param {string} tabId - The tab identifier to switch to.
-     */
+    /* Tab Switcher */
     function switchTab(tabId) {
-        try {
-            // Save current tab state before switching
-            saveTabState(AppState.activeTab);
-
-            // Update active tab
-            AppState.activeTab = tabId;
-
-            // Hide all panels
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
-
-            // Deactivate all tab buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('tab-active');
-                btn.classList.add('text-slate-400');
-            });
-
-            // Show selected panel
-            const panel = document.getElementById(`panel-${tabId}`);
-            if (panel) {
-                panel.classList.remove('hidden');
-                panel.classList.add('animate-slide-up');
-            }
-
-            // Activate selected tab button
-            const activeBtn = document.getElementById(`tab-${tabId}`);
-            if (activeBtn) {
-                activeBtn.classList.add('tab-active');
-                activeBtn.classList.remove('text-slate-400');
-            }
-
-            // Restore state for new tab
-            restoreTabState(tabId);
-
-            logDiagnostic(`Tab switched to: ${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`, 'info');
-            lucide.createIcons();
-        } catch (err) {
-            logDiagnostic(`Tab switch error: ${err.message}`, 'error');
-        }
+        saveTabState(AppState.activeTab);
+        AppState.activeTab = tabId;
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+        document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('tab-active'); b.classList.add('text-slate-400'); });
+        document.getElementById(`panel-${tabId}`).classList.remove('hidden');
+        document.getElementById(`tab-${tabId}`).classList.add('tab-active');
+        document.getElementById(`tab-${tabId}`).classList.remove('text-slate-400');
+        restoreTabState(tabId);
+        logDiagnostic(`Tab switched to: ${tabId}`, 'info');
+        lucide.createIcons();
     }
 
-    /**
-     * Save the current state of a tab's inputs.
-     * @param {string} tabId - The tab to save state for.
-     */
-    function saveTabState(tabId) {
-        if (tabId === 'converter') {
-            AppState.converter.fromCurrency = document.getElementById('fromCurrency')?.value || 'GBP';
-            AppState.converter.toCurrency = document.getElementById('toCurrency')?.value || 'USD';
-            AppState.converter.amount = document.getElementById('convertAmount')?.value || '';
-        } else if (tabId === 'savings') {
-            AppState.savings.plan = document.getElementById('savingsPlan')?.value || '1';
-            AppState.savings.lumpSum = document.getElementById('initialLump')?.value || '';
-            AppState.savings.monthly = document.getElementById('monthlyInvest')?.value || '';
-        }
+    function saveTabState(t) {
+        if (t === 'converter') { AppState.converter.fromCurrency = document.getElementById('fromCurrency').value; AppState.converter.toCurrency = document.getElementById('toCurrency').value; AppState.converter.amount = document.getElementById('convertAmount').value; }
+        else if (t === 'savings') { AppState.savings.plan = document.getElementById('savingsPlan').value; AppState.savings.lumpSum = document.getElementById('initialLump').value; AppState.savings.monthly = document.getElementById('monthlyInvest').value; }
+    }
+    function restoreTabState(t) {
+        if (t === 'converter') { document.getElementById('fromCurrency').value = AppState.converter.fromCurrency; document.getElementById('toCurrency').value = AppState.converter.toCurrency; document.getElementById('convertAmount').value = AppState.converter.amount; }
+        else if (t === 'savings') { document.getElementById('savingsPlan').value = AppState.savings.plan; document.getElementById('initialLump').value = AppState.savings.lumpSum; document.getElementById('monthlyInvest').value = AppState.savings.monthly; onPlanChange(); }
+        else if (t === 'clients') { renderClients(); }
     }
 
-    /**
-     * Restore the saved state of a tab's inputs.
-     * @param {string} tabId - The tab to restore state for.
-     */
-    function restoreTabState(tabId) {
-        if (tabId === 'converter') {
-            const fromEl = document.getElementById('fromCurrency');
-            const toEl = document.getElementById('toCurrency');
-            const amtEl = document.getElementById('convertAmount');
-            if (fromEl) fromEl.value = AppState.converter.fromCurrency;
-            if (toEl) toEl.value = AppState.converter.toCurrency;
-            if (amtEl) amtEl.value = AppState.converter.amount;
-        } else if (tabId === 'savings') {
-            const planEl = document.getElementById('savingsPlan');
-            const lumpEl = document.getElementById('initialLump');
-            const monthEl = document.getElementById('monthlyInvest');
-            if (planEl) planEl.value = AppState.savings.plan;
-            if (lumpEl) lumpEl.value = AppState.savings.lumpSum;
-            if (monthEl) monthEl.value = AppState.savings.monthly;
-            onPlanChange();  // Re-apply plan constraints
-        } else if (tabId === 'clients') {
-            renderClients();
-        }
-    }
-
-    /* =============================================================
-       8. MODULE A: CURRENCY CONVERTER
-       ============================================================= */
-
-    /**
-     * Determine the tiered fee percentage based on the amount.
-     * @param {number} amount - The initial amount.
-     * @returns {number} Fee as a decimal (e.g., 0.035 for 3.5%).
-     */
-    function getTieredFee(amount) {
-        if (amount > 2500) return 0.015;
-        if (amount > 1500) return 0.020;
-        if (amount > 500)  return 0.027;
-        return 0.035;
-    }
-
-    /**
-     * Convert between currencies using mock rates and tiered fees.
-     * Validates input, calculates fees, and renders the receipt.
-     */
+    /* Currency Converter Logic */
+    function getTieredFee(amt) { return amt > 2500 ? 0.015 : amt > 1500 ? 0.020 : amt > 500 ? 0.027 : 0.035; }
     function convertCurrency() {
         try {
-            const fromCurr = document.getElementById('fromCurrency').value;
-            const toCurr = document.getElementById('toCurrency').value;
-            const amountStr = document.getElementById('convertAmount').value;
-            const errorDiv = document.getElementById('converterError');
-            const errorMsg = document.getElementById('converterErrorMsg');
+            const from = document.getElementById('fromCurrency').value;
+            const to = document.getElementById('toCurrency').value;
+            const amtStr = document.getElementById('convertAmount').value;
+            const amt = parseFloat(amtStr);
+            const errDiv = document.getElementById('converterError');
 
-            // Parse and validate amount
-            const amount = parseFloat(amountStr);
-
-            if (isNaN(amount) || amountStr.trim() === '') {
-                errorDiv.classList.remove('hidden');
-                errorMsg.textContent = 'Please enter a valid numeric amount.';
-                logDiagnostic('Conversion failed: Invalid numeric input.', 'warn');
-                return;
+            if (isNaN(amt) || amt < 300 || amt > 5000) {
+                errDiv.classList.remove('hidden'); document.getElementById('converterErrorMsg').textContent = 'Amount must be between 300 and 5,000.';
+                logDiagnostic(`Conversion failed: Amount ${amtStr} out of bounds.`, 'warn'); return;
             }
+            errDiv.classList.add('hidden');
 
-            if (amount < 300 || amount > 5000) {
-                errorDiv.classList.remove('hidden');
-                errorMsg.textContent = `Amount must be between 300 and 5,000. You entered: ${amount.toFixed(2)}`;
-                logDiagnostic(`Conversion failed: Amount ${amount} out of bounds (300–5000).`, 'warn');
-                return;
-            }
+            const feeRate = getTieredFee(amt);
+            const feeAmt = amt * feeRate;
+            const afterFee = amt - feeAmt;
+            const rate = (1 / EXCHANGE_RATES_GBP[from]) * EXCHANGE_RATES_GBP[to];
+            const finalAmt = afterFee * rate;
 
-            // Hide error
-            errorDiv.classList.add('hidden');
-
-            // Calculate tiered fee
-            const feeRate = getTieredFee(amount);
-            const feePercent = (feeRate * 100).toFixed(1);
-            const feeAmount = amount * feeRate;
-            const amountAfterFee = amount - feeAmount;
-
-            // Calculate exchange rate (from → GBP → to)
-            const rateFromToGBP = 1 / EXCHANGE_RATES_GBP[fromCurr];
-            const rateGBPtoTo = EXCHANGE_RATES_GBP[toCurr];
-            const effectiveRate = rateFromToGBP * rateGBPtoTo;
-            const finalAmount = amountAfterFee * effectiveRate;
-
-            // Render receipt
             document.getElementById('receiptPlaceholder').classList.add('hidden');
             document.getElementById('receiptContent').classList.remove('hidden');
-
-            document.getElementById('rcptInitial').textContent = `${CURRENCY_SYMBOLS[fromCurr]}${amount.toFixed(2)} ${fromCurr}`;
-            document.getElementById('rcptFeeRate').textContent = `${feePercent}%`;
-            document.getElementById('rcptFeeAmt').textContent = `−${CURRENCY_SYMBOLS[fromCurr]}${feeAmount.toFixed(2)}`;
-            document.getElementById('rcptAfterFee').textContent = `${CURRENCY_SYMBOLS[fromCurr]}${amountAfterFee.toFixed(2)}`;
-            document.getElementById('rcptRate').textContent = `1 ${fromCurr} = ${effectiveRate.toFixed(4)} ${toCurr}`;
-            document.getElementById('rcptFinal').textContent = `${CURRENCY_SYMBOLS[toCurr]}${finalAmount.toFixed(2)} ${toCurr}`;
+            document.getElementById('rcptInitial').textContent = `${CURRENCY_SYMBOLS[from]}${amt.toFixed(2)} ${from}`;
+            document.getElementById('rcptFeeRate').textContent = `${(feeRate*100).toFixed(1)}%`;
+            document.getElementById('rcptFeeAmt').textContent = `−${CURRENCY_SYMBOLS[from]}${feeAmt.toFixed(2)}`;
+            document.getElementById('rcptAfterFee').textContent = `${CURRENCY_SYMBOLS[from]}${afterFee.toFixed(2)}`;
+            document.getElementById('rcptRate').textContent = `1 ${from} = ${rate.toFixed(4)} ${to}`;
+            document.getElementById('rcptFinal').textContent = `${CURRENCY_SYMBOLS[to]}${finalAmt.toFixed(2)} ${to}`;
             document.getElementById('rcptTimestamp').textContent = `Processed: ${getTimestamp()} UTC`;
-
-            logDiagnostic(`Currency conversion: ${amount.toFixed(2)} ${fromCurr} → ${finalAmount.toFixed(2)} ${toCurr} (fee: ${feePercent}%)`, 'success');
-
-        } catch (err) {
-            logDiagnostic(`Conversion error: ${err.message}`, 'error');
-            document.getElementById('converterError').classList.remove('hidden');
-            document.getElementById('converterErrorMsg').textContent = 'An unexpected error occurred. Please try again.';
-        }
+            logDiagnostic(`Currency converted: ${amt.toFixed(2)} ${from} → ${finalAmt.toFixed(2)} ${to}`, 'success');
+        } catch (e) { logDiagnostic(`Conversion error: ${e.message}`, 'error'); }
     }
 
-    /* =============================================================
-       9. MODULE B: SAVINGS & INVESTMENTS CALCULATOR
-       ============================================================= */
-
-    /**
-     * Handle savings plan dropdown change.
-     * Updates constraints and info panel based on selected plan.
-     */
+    /* Savings Plan Logic */
     function onPlanChange() {
-        try {
-            const planId = document.getElementById('savingsPlan')?.value || '1';
-            const plan = SAVINGS_PLANS[planId];
-            const lumpInput = document.getElementById('initialLump');
-            const detailsDiv = document.getElementById('planDetails');
-
-            if (!plan || !lumpInput || !detailsDiv) return;
-
-            // Enable/disable lump sum input
-            lumpInput.disabled = !plan.lumpEnabled;
-            if (!plan.lumpEnabled) {
-                lumpInput.value = '';
-                lumpInput.placeholder = 'Disabled for this plan';
-            } else {
-                lumpInput.placeholder = `Min: £${plan.minLump.toLocaleString()}`;
-            }
-
-            // Update monthly placeholder
-            const monthlyInput = document.getElementById('monthlyInvest');
-            if (monthlyInput) {
-                monthlyInput.placeholder = `Min: £${plan.minMonthly}`;
-            }
-
-            // Build plan details HTML
-            const maxYearlyStr = plan.maxYearly === Infinity ? 'Unlimited' : `£${plan.maxYearly.toLocaleString()}`;
-            let taxStr = 'None (0%)';
-            if (plan.taxBands.length === 1) {
-                taxStr = `${(plan.taxBands[0].rate * 100)}% on profit above £${plan.taxBands[0].threshold.toLocaleString()}`;
-            } else if (plan.taxBands.length === 2) {
-                taxStr = `${(plan.taxBands[0].rate * 100)}% > £${plan.taxBands[0].threshold.toLocaleString()}, ${(plan.taxBands[1].rate * 100)}% > £${plan.taxBands[1].threshold.toLocaleString()}`;
-            }
-
-            detailsDiv.innerHTML = `
-                <p class="font-semibold text-slate-300">${plan.name}</p>
-                <div class="flex justify-between"><span>Returns (annual)</span><span class="text-emerald-400">${(plan.minReturn*100).toFixed(1)}% – ${(plan.maxReturn*100).toFixed(1)}%</span></div>
-                <div class="flex justify-between"><span>Monthly Fee</span><span class="text-yellow-400">${(plan.monthlyFee*100).toFixed(2)}%</span></div>
-                <div class="flex justify-between"><span>Min Monthly</span><span class="text-slate-300">£${plan.minMonthly}</span></div>
-                <div class="flex justify-between"><span>Max Yearly</span><span class="text-slate-300">${maxYearlyStr}</span></div>
-                <div class="flex justify-between"><span>Tax</span><span class="text-slate-300">${taxStr}</span></div>
-            `;
-        } catch (err) {
-            logDiagnostic(`Plan change error: ${err.message}`, 'error');
-        }
+        const p = SAVINGS_PLANS[document.getElementById('savingsPlan').value];
+        const lump = document.getElementById('initialLump');
+        lump.disabled = !p.lumpEnabled;
+        lump.value = p.lumpEnabled ? lump.value : '';
+        lump.placeholder = p.lumpEnabled ? `Min: £${p.minLump}` : 'Disabled';
+        document.getElementById('monthlyInvest').placeholder = `Min: £${p.minMonthly}`;
+        document.getElementById('planDetails').innerHTML = `
+            <p class="font-semibold text-slate-300">${p.name}</p>
+            <div class="flex justify-between"><span>Annual Return</span><span class="text-emerald-400">${(p.minReturn*100).toFixed(1)}%–${(p.maxReturn*100).toFixed(1)}%</span></div>
+            <div class="flex justify-between"><span>Monthly Fee</span><span class="text-yellow-400">${(p.monthlyFee*100).toFixed(2)}%</span></div>
+            <div class="flex justify-between"><span>Max Yearly</span><span>${p.maxYearly===Infinity?'Unlimited':'£'+p.maxYearly.toLocaleString()}</span></div>
+        `;
     }
 
-    /**
-     * Calculate compound savings for 1, 5, and 10-year periods.
-     * Applies monthly fees, returns range, and tax bands.
-     */
     function calculateSavings() {
         try {
-            const planId = document.getElementById('savingsPlan').value;
-            const plan = SAVINGS_PLANS[planId];
-            const lumpSum = parseFloat(document.getElementById('initialLump').value) || 0;
-            const monthly = parseFloat(document.getElementById('monthlyInvest').value) || 0;
-            const errorDiv = document.getElementById('savingsError');
-            const errorMsg = document.getElementById('savingsErrorMsg');
+            const p = SAVINGS_PLANS[document.getElementById('savingsPlan').value];
+            const lump = parseFloat(document.getElementById('initialLump').value) || 0;
+            const m = parseFloat(document.getElementById('monthlyInvest').value) || 0;
+            const errDiv = document.getElementById('savingsError');
 
-            // ---- Validation ----
-            if (plan.lumpEnabled && lumpSum > 0 && lumpSum < plan.minLump) {
-                errorDiv.classList.remove('hidden');
-                errorMsg.textContent = `Minimum initial lump sum for ${plan.name} is £${plan.minLump.toLocaleString()}.`;
-                logDiagnostic(`Savings validation failed: Lump sum £${lumpSum} below minimum £${plan.minLump}.`, 'warn');
-                return;
-            }
+            if (p.lumpEnabled && lump > 0 && lump < p.minLump) { errDiv.classList.remove('hidden'); document.getElementById('savingsErrorMsg').textContent = `Minimum lump sum is £${p.minLump}.`; return; }
+            if (m < p.minMonthly) { errDiv.classList.remove('hidden'); document.getElementById('savingsErrorMsg').textContent = `Minimum monthly is £${p.minMonthly}.`; return; }
+            if (m * 12 > p.maxYearly) { errDiv.classList.remove('hidden'); document.getElementById('savingsErrorMsg').textContent = `Yearly total (£${m*12}) exceeds max £${p.maxYearly}.`; return; }
+            errDiv.classList.add('hidden');
 
-            if (monthly < plan.minMonthly) {
-                errorDiv.classList.remove('hidden');
-                errorMsg.textContent = `Minimum monthly investment is £${plan.minMonthly}.`;
-                logDiagnostic(`Savings validation failed: Monthly £${monthly} below minimum £${plan.minMonthly}.`, 'warn');
-                return;
-            }
-
-            const yearlyContrib = monthly * 12;
-            if (yearlyContrib > plan.maxYearly) {
-                errorDiv.classList.remove('hidden');
-                errorMsg.textContent = `Maximum yearly contribution for ${plan.name} is £${plan.maxYearly.toLocaleString()}. Your monthly £${monthly} totals £${yearlyContrib.toLocaleString()}/year.`;
-                logDiagnostic(`Savings validation failed: Yearly total £${yearlyContrib} exceeds £${plan.maxYearly} limit.`, 'warn');
-                return;
-            }
-
-            errorDiv.classList.add('hidden');
-
-            // ---- Compound Calculation ----
-            const periods = [1, 5, 10];
-            const results = [];
-            const chartLabelsYears = [];
-            const chartMinData = [];
-            const chartMaxData = [];
-
-            // Calculate for each year up to 10 for chart, but save table rows for 1, 5, 10
-            for (let year = 1; year <= 10; year++) {
-                const months = year * 12;
-                const totalDeposited = lumpSum + (monthly * months);
-
-                // Calculate for min and max return scenarios
-                const calcScenario = (annualReturn) => {
-                    const monthlyReturn = annualReturn / 12;
-                    let balance = lumpSum;
-                    let totalFees = 0;
-
-                    for (let m = 1; m <= months; m++) {
-                        // Add monthly contribution
-                        balance += monthly;
-                        // Apply monthly return
-                        balance *= (1 + monthlyReturn);
-                        // Deduct monthly fee
-                        const fee = balance * plan.monthlyFee / 12;
-                        totalFees += fee;
-                        balance -= fee;
+            const results = []; const years = []; const minData = []; const maxData = [];
+            for (let y = 1; y <= 10; y++) {
+                const months = y * 12; const dep = lump + (m * months);
+                const calc = (ret) => {
+                    let bal = lump; let fees = 0;
+                    for (let i = 1; i <= months; i++) { bal += m; bal *= (1 + ret/12); const f = bal * p.monthlyFee / 12; fees += f; bal -= f; }
+                    const pft = bal - dep;
+                    let tax = 0;
+                    if (pft > 0 && p.taxBands.length) {
+                        let rem = pft;
+                        [...p.taxBands].sort((a,b)=>b.threshold-a.threshold).forEach(b => { if (rem > b.threshold) { tax += (rem - b.threshold) * b.rate; rem = b.threshold; } });
                     }
-
-                    const grossProfit = balance - totalDeposited;
-
-                    // Apply tax bands
-                    let taxPaid = 0;
-                    if (grossProfit > 0 && plan.taxBands.length > 0) {
-                        // Sort bands descending by threshold for calculation
-                        const sortedBands = [...plan.taxBands].sort((a, b) => b.threshold - a.threshold);
-
-                        let remainingProfit = grossProfit;
-                        for (const band of sortedBands) {
-                            if (remainingProfit > band.threshold) {
-                                const taxableAtThisBand = remainingProfit - band.threshold;
-                                taxPaid += taxableAtThisBand * band.rate;
-                                remainingProfit = band.threshold;
-                            }
-                        }
-                    }
-
-                    const netValue = balance - taxPaid;
-                    return { value: netValue, profit: grossProfit - taxPaid, fees: totalFees, taxes: taxPaid };
+                    return { val: bal - tax, pft: pft - tax, fees, tax };
                 };
-
-                const minScenario = calcScenario(plan.minReturn);
-                const maxScenario = calcScenario(plan.maxReturn);
-
-                // Chart data (every year)
-                chartLabelsYears.push(`Year ${year}`);
-                chartMinData.push(minScenario.value);
-                chartMaxData.push(maxScenario.value);
-
-                // Table data (1, 5, 10 only)
-                if (periods.includes(year)) {
-                    results.push({
-                        timeframe: `${year} Year${year > 1 ? 's' : ''}`,
-                        minValue: minScenario.value,
-                        maxValue: maxScenario.value,
-                        profit: `${formatCurrency(minScenario.profit)} – ${formatCurrency(maxScenario.profit)}`,
-                        fees: `${formatCurrency(minScenario.fees)} – ${formatCurrency(maxScenario.fees)}`,
-                        taxes: `${formatCurrency(minScenario.taxes)} – ${formatCurrency(maxScenario.taxes)}`,
-                    });
+                const minRes = calc(p.minReturn); const maxRes = calc(p.maxReturn);
+                years.push(`Yr ${y}`); minData.push(minRes.val); maxData.push(maxRes.val);
+                if ([1, 5, 10].includes(y)) {
+                    results.push({ timeframe: `${y} Year${y>1?'s':''}`, min: minRes.val, max: maxRes.val, profit: `${formatCurrency(minRes.pft)}–${formatCurrency(maxRes.pft)}`, fees: `${formatCurrency(minRes.fees)}–${formatCurrency(maxRes.fees)}`, tax: `${formatCurrency(minRes.tax)}–${formatCurrency(maxRes.tax)}` });
                 }
             }
 
-            // ---- Render Results Table ----
             document.getElementById('savingsPlaceholder').classList.add('hidden');
             document.getElementById('savingsResults').classList.remove('hidden');
-
-            const tbody = document.getElementById('savingsTableBody');
-            tbody.innerHTML = results.map(r => `
-                <tr class="hover:bg-slate-800/30 transition-colors">
-                    <td class="py-3 px-2 text-white font-medium">${r.timeframe}</td>
-                    <td class="py-3 px-2 text-right text-blue-400 font-mono">${formatCurrency(r.minValue)}</td>
-                    <td class="py-3 px-2 text-right text-emerald-400 font-mono">${formatCurrency(r.maxValue)}</td>
-                    <td class="py-3 px-2 text-right text-slate-300 font-mono text-xs">${r.profit}</td>
-                    <td class="py-3 px-2 text-right text-yellow-400 font-mono text-xs">${r.fees}</td>
-                    <td class="py-3 px-2 text-right text-red-400 font-mono text-xs">${r.taxes}</td>
-                </tr>
+            document.getElementById('savingsTableBody').innerHTML = results.map(r => `
+                <tr class="hover:bg-slate-800/30"><td class="py-3 px-2 text-white font-medium">${r.timeframe}</td><td class="py-3 px-2 text-right text-blue-400 font-mono">${formatCurrency(r.min)}</td><td class="py-3 px-2 text-right text-emerald-400 font-mono">${formatCurrency(r.max)}</td><td class="py-3 px-2 text-right text-slate-300 font-mono text-xs">${r.profit}</td><td class="py-3 px-2 text-right text-yellow-400 font-mono text-xs">${r.fees}</td><td class="py-3 px-2 text-right text-red-400 font-mono text-xs">${r.tax}</td></tr>
             `).join('');
 
-            // ---- Render Chart ----
             document.getElementById('chartPlaceholder').classList.add('hidden');
             document.getElementById('chartContainer').classList.remove('hidden');
-
-            // Destroy previous chart instance if it exists
-            if (AppState.chartInstance) {
-                AppState.chartInstance.destroy();
-            }
-
+            if (AppState.chartInstance) AppState.chartInstance.destroy();
             const ctx = document.getElementById('savingsChart').getContext('2d');
             AppState.chartInstance = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: chartLabelsYears,
-                    datasets: [
-                        {
-                            label: 'Min Projected Return',
-                            data: chartMinData,
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointHoverRadius: 6,
-                            borderWidth: 2,
-                        },
-                        {
-                            label: 'Max Projected Return',
-                            data: chartMaxData,
-                            borderColor: '#10b981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointHoverRadius: 6,
-                            borderWidth: 2,
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#94a3b8',
-                                font: { family: 'Inter', size: 12 },
-                                usePointStyle: true,
-                                pointStyle: 'circle',
-                            },
-                        },
-                        tooltip: {
-                            backgroundColor: '#1e293b',
-                            titleColor: '#f1f5f9',
-                            bodyColor: '#cbd5e1',
-                            borderColor: '#334155',
-                            borderWidth: 1,
-                            cornerRadius: 8,
-                            padding: 12,
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`;
-                                },
-                            },
-                        },
-                    },
-                    scales: {
-                        x: {
-                            ticks: { color: '#64748b', font: { family: 'Inter', size: 11 } },
-                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
-                        },
-                        y: {
-                            ticks: {
-                                color: '#64748b',
-                                font: { family: 'Inter', size: 11 },
-                                callback: function(value) { return formatCurrency(value); },
-                            },
-                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
-                        },
-                    },
-                },
+                data: { labels: years, datasets: [{ label: 'Min Return', data: minData, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, tension: 0.4 }, { label: 'Max Return', data: maxData, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, tension: 0.4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } }, scales: { x: { ticks: { color: '#64748b' } }, y: { ticks: { color: '#64748b', callback: v => formatCurrency(v) } } } }
             });
-
-            logDiagnostic(`Savings calculated: ${plan.name} plan, £${lumpSum} lump + £${monthly}/mo — projected 10yr max: ${formatCurrency(chartMaxData[9])}`, 'success');
-
-        } catch (err) {
-            logDiagnostic(`Savings calculation error: ${err.message}`, 'error');
-            document.getElementById('savingsError').classList.remove('hidden');
-            document.getElementById('savingsErrorMsg').textContent = 'An unexpected calculation error occurred. Please check inputs.';
-        }
+            logDiagnostic(`Savings calculated: ${p.name} plan`, 'success');
+        } catch (e) { logDiagnostic(`Savings calculation error: ${e.message}`, 'error'); }
     }
 
-    /* =============================================================
-       10. MODULE C: CLIENT MANAGEMENT (MySQL Database API + Offline Fallback)
-       ============================================================= */
-
-    // Memory cache for active client list
+    /* Client Database Logic (MySQL API + Cache Fallback) */
     let cachedClients = [];
-
-    /**
-     * Load clients from MySQL DB via api.php or fallback to local cache.
-     * @returns {Promise<Array>} Array of client objects.
-     */
     async function loadClients() {
         try {
             const res = await fetch('api.php?action=getClients');
             if (res.ok) {
                 const json = await res.json();
-                if (json.status === 'success') {
-                    cachedClients = json.data;
-                    localStorage.setItem('enomy_clients_cache', JSON.stringify(cachedClients));
-                    logDiagnostic(`Fetched ${cachedClients.length} client(s) directly from MySQL database (Customer table).`, 'success');
-                    return cachedClients;
-                }
+                if (json.status === 'success') { cachedClients = json.data; localStorage.setItem('enomy_clients_cache', JSON.stringify(cachedClients)); logDiagnostic(`Fetched ${cachedClients.length} clients from MySQL DB.`, 'success'); return cachedClients; }
             }
-            throw new Error(res.statusText || 'API response error');
-        } catch (err) {
-            logDiagnostic(`MySQL DB API offline or unreachable (${err.message}). Operating in local cache mode.`, 'warn');
-            const data = localStorage.getItem('enomy_clients_cache') || localStorage.getItem('enomy_clients');
-            cachedClients = data ? JSON.parse(data) : [
-                { id: 'CL-101', name: 'John Doe', email: 'john.doe@enomy-client.com', phone: '+44 7700 900101', txCount: 1 },
-                { id: 'CL-102', name: 'Jane Smith', email: 'jane.smith@enomy-client.com', phone: '+44 7700 900102', txCount: 1 }
-            ];
+            throw new Error('API offline');
+        } catch (e) {
+            logDiagnostic('MySQL DB API offline. Operating in local cache mode.', 'warn');
+            const data = localStorage.getItem('enomy_clients_cache');
+            cachedClients = data ? JSON.parse(data) : [{ id: 'CL-101', name: 'John Doe', email: 'john.doe@enomy-client.com', phone: '+44 7700 900101', txCount: 1 }, { id: 'CL-102', name: 'Jane Smith', email: 'jane.smith@enomy-client.com', phone: '+44 7700 900102', txCount: 1 }];
             return cachedClients;
         }
     }
 
-    /**
-     * Render the client table asynchronously.
-     */
     async function renderClients() {
         try {
             const clients = await loadClients();
             const tbody = document.getElementById('clientTableBody');
-            const emptyState = document.getElementById('clientsEmpty');
-
-            if (!tbody || !emptyState) return;
-
-            if (clients.length === 0) {
-                tbody.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                return;
-            }
-
-            emptyState.classList.add('hidden');
-
-            tbody.innerHTML = clients.map(client => `
-                <tr class="hover:bg-slate-800/30 transition-colors">
-                    <td class="py-3 px-3 text-blue-400 font-mono text-xs">${client.id}</td>
-                    <td class="py-3 px-3 text-white font-medium">${escapeHtml(client.name)}</td>
-                    <td class="py-3 px-3 text-slate-300">${escapeHtml(client.email)}</td>
-                    <td class="py-3 px-3 text-slate-300">${escapeHtml(client.phone)}</td>
-                    <td class="py-3 px-3 text-center">
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 font-semibold text-sm">${client.txCount || 0}</span>
-                    </td>
-                    <td class="py-3 px-3 text-center">
-                        <div class="flex items-center justify-center gap-1">
-                            <button onclick="editClient('${client.id}')" title="Edit"
-                                class="w-8 h-8 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 flex items-center justify-center transition-colors">
-                                <i data-lucide="pencil" class="w-3.5 h-3.5 text-blue-400"></i>
-                            </button>
-                            <button onclick="deleteClient('${client.id}')" title="Delete"
-                                class="w-8 h-8 rounded-lg bg-red-500/10 hover:bg-red-500/20 flex items-center justify-center transition-colors">
-                                <i data-lucide="trash-2" class="w-3.5 h-3.5 text-red-400"></i>
-                            </button>
-                            <button onclick="incrementTx('${client.id}')" title="Add Transaction"
-                                class="w-8 h-8 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 flex items-center justify-center transition-colors">
-                                <i data-lucide="plus" class="w-3.5 h-3.5 text-emerald-400"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+            if (!tbody) return;
+            if (!clients.length) { tbody.innerHTML = ''; document.getElementById('clientsEmpty').classList.remove('hidden'); return; }
+            document.getElementById('clientsEmpty').classList.add('hidden');
+            tbody.innerHTML = clients.map(c => `
+                <tr class="hover:bg-slate-800/30"><td class="py-3 px-3 text-blue-400 font-mono text-xs">${c.id}</td><td class="py-3 px-3 text-white font-medium">${escapeHtml(c.name)}</td><td class="py-3 px-3 text-slate-300">${escapeHtml(c.email)}</td><td class="py-3 px-3 text-slate-300">${escapeHtml(c.phone)}</td><td class="py-3 px-3 text-center"><span class="px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 font-semibold text-xs">${c.txCount||0}</span></td><td class="py-3 px-3 text-center"><button onclick="editClient('${c.id}')" class="p-1 text-blue-400 hover:text-blue-300"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="deleteClient('${c.id}')" class="p-1 text-red-400 hover:text-red-300"><i data-lucide="trash-2" class="w-4 h-4"></i></button><button onclick="incrementTx('${c.id}')" class="p-1 text-emerald-400 hover:text-emerald-300"><i data-lucide="plus" class="w-4 h-4"></i></button></td></tr>
             `).join('');
-
             lucide.createIcons();
-        } catch (err) {
-            logDiagnostic(`Client render error: ${err.message}`, 'error');
+        } catch (e) { logDiagnostic(`Render error: ${e.message}`, 'error'); }
+    }
+
+    function openClientModal() { document.getElementById('clientModal').classList.remove('hidden'); document.getElementById('modalTitle').textContent = 'Add New Client'; document.getElementById('modalSaveText').textContent = 'Save Client'; document.getElementById('editClientId').value = ''; document.getElementById('clientName').value = ''; document.getElementById('clientEmail').value = ''; document.getElementById('clientPhone').value = ''; document.getElementById('modalError').classList.add('hidden'); }
+    function editClient(id) { const c = cachedClients.find(x => x.id === id); if (!c) return; document.getElementById('clientModal').classList.remove('hidden'); document.getElementById('modalTitle').textContent = 'Edit Client'; document.getElementById('modalSaveText').textContent = 'Update Client'; document.getElementById('editClientId').value = id; document.getElementById('clientName').value = c.name; document.getElementById('clientEmail').value = c.email; document.getElementById('clientPhone').value = c.phone; document.getElementById('modalError').classList.add('hidden'); lucide.createIcons(); }
+    function closeClientModal() { document.getElementById('clientModal').classList.add('hidden'); }
+
+    async function saveClient() {
+        const name = document.getElementById('clientName').value.trim(); const email = document.getElementById('clientEmail').value.trim(); const phone = document.getElementById('clientPhone').value.trim(); const editId = document.getElementById('editClientId').value;
+        if (!name || !email || !phone) { document.getElementById('modalError').classList.remove('hidden'); document.getElementById('modalErrorMsg').textContent = 'All fields required.'; return; }
+        try {
+            const res = await fetch('api.php?action=saveClient', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: editId, name, email, phone }) });
+            if (res.ok) logDiagnostic(`Client saved to MySQL DB: ${name}`, 'success'); else throw new Error('API save error');
+        } catch (e) {
+            logDiagnostic(`API save failed. Using local cache.`, 'warn');
+            if (editId) { const idx = cachedClients.findIndex(c => c.id === editId); if (idx !== -1) { cachedClients[idx].name = name; cachedClients[idx].email = email; cachedClients[idx].phone = phone; } }
+            else { cachedClients.push({ id: generateClientId(), name, email, phone, txCount: 0 }); }
+            localStorage.setItem('enomy_clients_cache', JSON.stringify(cachedClients));
         }
+        await renderClients(); closeClientModal();
     }
 
-    /**
-     * Escape HTML to prevent XSS in client data display.
-     * @param {string} str - String to escape.
-     * @returns {string} Escaped string.
-     */
-    function escapeHtml(str) {
-        const div = document.createElement('div');
-        div.textContent = str || '';
-        return div.innerHTML;
+    async function deleteClient(id) {
+        if (!confirm('Delete client?')) return;
+        try {
+            const res = await fetch('api.php?action=deleteClient', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) });
+            if (res.ok) logDiagnostic(`Client deleted from MySQL DB: ${id}`, 'warn'); else throw new Error('API delete error');
+        } catch (e) { cachedClients = cachedClients.filter(c => c.id !== id); localStorage.setItem('enomy_clients_cache', JSON.stringify(cachedClients)); }
+        await renderClients();
     }
 
-    /**
-     * Open the client modal for adding a new client.
-     */
-    function openClientModal() {
-        document.getElementById('clientModal').classList.remove('hidden');
-        document.getElementById('modalTitle').textContent = 'Add New Client';
-        document.getElementById('modalSaveText').textContent = 'Save Client';
-        document.getElementById('editClientId').value = '';
-        document.getElementById('clientName').value = '';
-        document.getElementById('clientEmail').value = '';
-        document.getElementById('clientPhone').value = '';
-        document.getElementById('modalError').classList.add('hidden');
+    async function incrementTx(id) {
+        try {
+            const res = await fetch('api.php?action=addTransaction', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ customerID: id, initialCurrency: 'GBP', targetCurrency: 'USD', amount: 500, feeApplied: 0.027, finalAmount: 619.22 }) });
+            if (res.ok) logDiagnostic(`Transaction added in MySQL DB for ${id}`, 'success'); else throw new Error('API tx error');
+        } catch (e) { const c = cachedClients.find(x => x.id === id); if (c) { c.txCount = (c.txCount || 0) + 1; localStorage.setItem('enomy_clients_cache', JSON.stringify(cachedClients)); } }
+        await renderClients();
     }
 
-    /**
-     * Open client modal pre-filled for editing.
-     * @param {string} clientId - The ID of the client to edit.
-     */
-    function editClient(clientId) {
-        const client = cachedClients.find(c => c.id === clientId);
-        if (!client) return;
-
-        document.getElementById('clientModal').classList.remove('hidden');
-        document.getElementById('modalTitle').textContent = 'Edit Client';
-        document.getElementById('modalSaveText').textContent = 'Update Client';
-        document.getElementById('editClientId').value = clientId;
-        document.getElementById('clientName').value = client.name;
-        document.getElementById('clientEmail').value = client.email;
-        document.getElementById('clientPhone').value = client.phone;
-        document.getElementById('modalError').classList.add('hidden');
+    /* Diagnostics & Network Simulation */
+    function simulateNetworkFailure() {
+        AppState.isOffline = true;
+        document.getElementById('offlineBanner').classList.remove('hidden');
+        document.getElementById('statusDot').className = 'w-2 h-2 rounded-full bg-red-400';
+        document.getElementById('statusText').textContent = 'Offline';
+        document.getElementById('sysNetStatus').textContent = 'Disconnected';
+        document.getElementById('sysNetStatus').className = 'text-red-400 font-mono';
+        document.getElementById('simFailureBtn').classList.add('hidden');
+        document.getElementById('restoreNetBtn').classList.remove('hidden');
+        logDiagnostic('━━━ NETWORK FAILURE DETECTED ━━━', 'critical');
+        logDiagnostic('Offline protocol engaged. Caching data locally.', 'warn');
         lucide.createIcons();
     }
 
-    /**
-     * Close the client modal.
-     */
-    function closeClientModal() {
-        document.getElementById('clientModal').classList.add('hidden');
-    }
-
-    /**
-     * Save or update a client to MySQL database via api.php or local cache.
-     */
-    async function saveClient() {
-        try {
-            const name = document.getElementById('clientName').value.trim();
-            const email = document.getElementById('clientEmail').value.trim();
-            const phone = document.getElementById('clientPhone').value.trim();
-            const editId = document.getElementById('editClientId').value;
-            const errorDiv = document.getElementById('modalError');
-            const errorMsg = document.getElementById('modalErrorMsg');
-
-            if (!name || !email || !phone) {
-                errorDiv.classList.remove('hidden');
-                errorMsg.textContent = 'All fields are required.';
-                return;
-            }
-
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                errorDiv.classList.remove('hidden');
-                errorMsg.textContent = 'Please enter a valid email address.';
-                return;
-            }
-
-            errorDiv.classList.add('hidden');
-
-            try {
-                const res = await fetch('api.php?action=saveClient', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: editId, name, email, phone })
-                });
-
-                if (res.ok) {
-                    const json = await res.json();
-                    if (json.status === 'success') {
-                        logDiagnostic(`Client saved to MySQL DB (${json.id || editId}): ${name}`, 'success');
-                    }
-                } else {
-                    throw new Error('HTTP ' + res.status);
-                }
-            } catch (apiErr) {
-                logDiagnostic(`API save failed (${apiErr.message}). Saving to local cache mode.`, 'warn');
-                if (editId) {
-                    const idx = cachedClients.findIndex(c => c.id === editId);
-                    if (idx !== -1) {
-                        cachedClients[idx].name = name;
-                        cachedClients[idx].email = email;
-                        cachedClients[idx].phone = phone;
-                    }
-                } else {
-                    const newId = generateClientId();
-                    cachedClients.push({ id: newId, name, email, phone, txCount: 0, createdAt: getTimestamp() });
-                }
-                localStorage.setItem('enomy_clients_cache', JSON.stringify(cachedClients));
-            }
-
-            await renderClients();
-            closeClientModal();
-        } catch (err) {
-            logDiagnostic(`Client save error: ${err.message}`, 'error');
-        }
-    }
-
-    /**
-     * Delete a client from MySQL DB via api.php or local cache.
-     * @param {string} clientId - The client ID to delete.
-     */
-    async function deleteClient(clientId) {
-        if (!confirm('Are you sure you want to delete this client? This action cannot be undone.')) return;
-
-        try {
-            try {
-                const res = await fetch('api.php?action=deleteClient', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: clientId })
-                });
-                if (res.ok) {
-                    logDiagnostic(`Client deleted from MySQL DB: ${clientId}`, 'warn');
-                }
-            } catch (apiErr) {
-                logDiagnostic(`API delete failed (${apiErr.message}). Deleting from local cache.`, 'warn');
-                cachedClients = cachedClients.filter(c => c.id !== clientId);
-                localStorage.setItem('enomy_clients_cache', JSON.stringify(cachedClients));
-            }
-
-            await renderClients();
-        } catch (err) {
-            logDiagnostic(`Client deletion error: ${err.message}`, 'error');
-        }
-    }
-
-    /**
-     * Record a transaction for a client in the MySQL database.
-     * @param {string} clientId - The client ID.
-     */
-    async function incrementTx(clientId) {
-        try {
-            try {
-                const res = await fetch('api.php?action=addTransaction', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ customerID: clientId, initialCurrency: 'GBP', targetCurrency: 'USD', amount: 500, feeApplied: 0.027, finalAmount: 619.22 })
-                });
-                if (res.ok) {
-                    logDiagnostic(`Transaction logged in MySQL Transaction table for client ${clientId}`, 'success');
-                }
-            } catch (apiErr) {
-                logDiagnostic(`API transaction insert failed (${apiErr.message}). Incrementing in local cache.`, 'warn');
-                const client = cachedClients.find(c => c.id === clientId);
-                if (client) {
-                    client.txCount = (client.txCount || 0) + 1;
-                    localStorage.setItem('enomy_clients_cache', JSON.stringify(cachedClients));
-                }
-            }
-
-            await renderClients();
-        } catch (err) {
-            logDiagnostic(`Transaction error: ${err.message}`, 'error');
-        }
-    }
-
-    /* =============================================================
-       11. MODULE D: SYSTEM DIAGNOSTICS & NETWORK SIMULATION
-       ============================================================= */
-
-    /**
-     * Simulate a network failure event.
-     * Shows offline banner, updates status, and logs critical event.
-     */
-    function simulateNetworkFailure() {
-        try {
-            AppState.isOffline = true;
-
-            // Show offline banner (offset nav if needed)
-            const banner = document.getElementById('offlineBanner');
-            banner.classList.remove('hidden');
-            document.getElementById('mainNav').style.top = '40px';
-            document.getElementById('appContainer').style.paddingTop = '7rem';
-
-            // Update status indicator
-            const statusDot = document.getElementById('statusDot');
-            statusDot.classList.remove('bg-emerald-400');
-            statusDot.classList.add('bg-red-400');
-            document.getElementById('statusText').textContent = 'Offline';
-            document.getElementById('sysNetStatus').textContent = 'Disconnected';
-            document.getElementById('sysNetStatus').classList.remove('text-emerald-400');
-            document.getElementById('sysNetStatus').classList.add('text-red-400');
-
-            // Toggle buttons
-            document.getElementById('simFailureBtn').classList.add('hidden');
-            document.getElementById('restoreNetBtn').classList.remove('hidden');
-
-            // Log critical events
-            logDiagnostic('━━━ NETWORK FAILURE DETECTED ━━━', 'critical');
-            logDiagnostic('Connection to Enomy-Finances API gateway lost.', 'error');
-            logDiagnostic('Initiating offline failover protocol...', 'warn');
-            logDiagnostic('All pending data is being cached in localStorage to prevent data loss.', 'warn');
-            logDiagnostic('Client database: Cached ✓ | Exchange rates: Using last known values ✓', 'info');
-            logDiagnostic('System operating in degraded offline mode. Some features may be limited.', 'warn');
-
-            lucide.createIcons();
-        } catch (err) {
-            logDiagnostic(`Network simulation error: ${err.message}`, 'error');
-        }
-    }
-
-    /**
-     * Restore network connection (simulation).
-     */
     function restoreNetwork() {
-        try {
-            AppState.isOffline = false;
-
-            // Hide offline banner
-            document.getElementById('offlineBanner').classList.add('hidden');
-            document.getElementById('mainNav').style.top = '0';
-            document.getElementById('appContainer').style.paddingTop = '';
-
-            // Restore status indicator
-            const statusDot = document.getElementById('statusDot');
-            statusDot.classList.remove('bg-red-400');
-            statusDot.classList.add('bg-emerald-400');
-            document.getElementById('statusText').textContent = 'Online';
-            document.getElementById('sysNetStatus').textContent = 'Connected';
-            document.getElementById('sysNetStatus').classList.remove('text-red-400');
-            document.getElementById('sysNetStatus').classList.add('text-emerald-400');
-
-            // Toggle buttons
-            document.getElementById('simFailureBtn').classList.remove('hidden');
-            document.getElementById('restoreNetBtn').classList.add('hidden');
-
-            logDiagnostic('━━━ NETWORK CONNECTION RESTORED ━━━', 'success');
-            logDiagnostic('API gateway reconnected. Syncing cached data...', 'info');
-            logDiagnostic('All systems operational. Returning to normal mode.', 'success');
-
-            lucide.createIcons();
-        } catch (err) {
-            logDiagnostic(`Network restore error: ${err.message}`, 'error');
-        }
+        AppState.isOffline = false;
+        document.getElementById('offlineBanner').classList.add('hidden');
+        document.getElementById('statusDot').className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+        document.getElementById('statusText').textContent = 'Online';
+        document.getElementById('sysNetStatus').textContent = 'Connected';
+        document.getElementById('sysNetStatus').className = 'text-emerald-400 font-mono';
+        document.getElementById('simFailureBtn').classList.remove('hidden');
+        document.getElementById('restoreNetBtn').classList.add('hidden');
+        logDiagnostic('━━━ NETWORK CONNECTION RESTORED ━━━', 'success');
+        lucide.createIcons();
     }
 
-    /* =============================================================
-       12. UPTIME TRACKER
-       ============================================================= */
-
-    /**
-     * Update the uptime display every second.
-     */
-    function updateUptime() {
-        const elapsed = Math.floor((Date.now() - AppState.sessionStartTime) / 1000);
-        const hrs = String(Math.floor(elapsed / 3600)).padStart(2, '0');
-        const mins = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
-        const secs = String(elapsed % 60).padStart(2, '0');
-        const uptimeEl = document.getElementById('sysUptime');
-        if (uptimeEl) uptimeEl.textContent = `${hrs}:${mins}:${secs}`;
-    }
-
-    setInterval(updateUptime, 1000);
-
-    /* =============================================================
-       13. INITIALIZATION
-       ============================================================= */
+    setInterval(() => {
+        const el = Math.floor((Date.now() - AppState.sessionStartTime) / 1000);
+        document.getElementById('sysUptime').textContent = `${String(Math.floor(el/3600)).padStart(2,'0')}:${String(Math.floor((el%3600)/60)).padStart(2,'0')}:${String(el%60).padStart(2,'0')}`;
+    }, 1000);
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Initialize Lucide icons
-        lucide.createIcons();
-
-        // Initialize plan details display
-        onPlanChange();
-
-        // Log system boot sequence
+        lucide.createIcons(); onPlanChange();
         logDiagnostic('═══════════════════════════════════════════', 'info');
         logDiagnostic('  ENOMY-FINANCES  v2.6.1  —  System Boot  ', 'info');
         logDiagnostic('═══════════════════════════════════════════', 'info');
-        logDiagnostic('Initialising core modules...', 'info');
-        logDiagnostic('Module A: Currency Converter ........... loaded ✓', 'success');
-        logDiagnostic('Module B: Savings & Investments ........ loaded ✓', 'success');
-        logDiagnostic('Module C: Client Database (localStorage) loaded ✓', 'success');
-        logDiagnostic('Module D: System Diagnostics ........... loaded ✓', 'success');
-        logDiagnostic('EFSM Auth Guard active — awaiting credentials.', 'info');
-
-        // Check localStorage status
-        try {
-            localStorage.setItem('enomy_test', '1');
-            localStorage.removeItem('enomy_test');
-            logDiagnostic('localStorage: Available and writable.', 'success');
-        } catch (e) {
-            logDiagnostic('localStorage: UNAVAILABLE — data persistence disabled.', 'error');
-        }
-
-        logDiagnostic('System ready. Awaiting authentication.', 'info');
+        logDiagnostic('Core modules initialised ✓ | Ready for auth.', 'success');
     });
     </script>
 </body>
