@@ -22,12 +22,10 @@
     </style>
 </head>
 <body class="bg-slate-950 text-slate-200 min-h-screen antialiased">
-    <!-- Offline Banner -->
     <div id="offlineBanner" class="hidden offline-banner fixed top-0 left-0 right-0 z-50 px-4 py-2 text-center text-yellow-100 font-semibold text-sm flex items-center justify-center gap-2">
         <i data-lucide="wifi-off" class="w-4 h-4"></i><span>⚠ Network Failure Detected — Operating in Offline Mode (Caching Locally)</span>
     </div>
 
-    <!-- Navigation Bar -->
     <nav id="mainNav" class="fixed top-0 left-0 right-0 z-40 glass-card border-b border-slate-700/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
             <div class="flex items-center gap-3">
@@ -46,9 +44,7 @@
         </div>
     </nav>
 
-    <!-- Main Container -->
     <main id="appContainer" class="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <!-- 1. AUTHENTICATION VIEW -->
         <section id="authView" class="flex items-center justify-center min-h-[80vh]">
             <div class="w-full max-w-md glass-card rounded-2xl p-8 shadow-2xl">
                 <div class="text-center mb-8">
@@ -72,11 +68,9 @@
             </div>
         </section>
 
-        <!-- 2. DASHBOARD VIEW -->
         <section id="dashboardView" class="hidden">
             <div class="mb-6"><h2 class="text-2xl font-bold text-white">Financial Dashboard</h2><p class="text-slate-400 text-sm mt-1">Manage conversions, savings, clients, and system health</p></div>
 
-            <!-- Tabs -->
             <div class="flex flex-wrap gap-2 mb-6 p-1.5 rounded-xl bg-slate-900/50 border border-slate-800/60">
                 <button onclick="switchTab('converter')" id="tab-converter" class="tab-btn tab-active flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-transparent"><i data-lucide="arrow-left-right" class="w-4 h-4"></i>Currency Converter</button>
                 <button onclick="switchTab('savings')" id="tab-savings" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 border border-transparent"><i data-lucide="trending-up" class="w-4 h-4"></i>Savings & Investments</button>
@@ -84,7 +78,6 @@
                 <button onclick="switchTab('diagnostics')" id="tab-diagnostics" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 border border-transparent"><i data-lucide="activity" class="w-4 h-4"></i>System Diagnostics</button>
             </div>
 
-            <!-- PANEL: CURRENCY CONVERTER -->
             <div id="panel-converter" class="tab-panel">
                 <div class="grid lg:grid-cols-2 gap-6">
                     <div class="glass-card rounded-2xl p-6">
@@ -119,7 +112,6 @@
                 </div>
             </div>
 
-            <!-- PANEL: SAVINGS & INVESTMENTS -->
             <div id="panel-savings" class="tab-panel hidden">
                 <div class="grid lg:grid-cols-3 gap-6">
                     <div class="glass-card rounded-2xl p-6">
@@ -150,7 +142,6 @@
                 </div>
             </div>
 
-            <!-- PANEL: CLIENT DATABASE -->
             <div id="panel-clients" class="tab-panel hidden">
                 <div class="glass-card rounded-2xl p-6">
                     <div class="flex items-center justify-between mb-5">
@@ -167,7 +158,6 @@
                 </div>
             </div>
 
-            <!-- PANEL: SYSTEM DIAGNOSTICS -->
             <div id="panel-diagnostics" class="tab-panel hidden">
                 <div class="grid lg:grid-cols-3 gap-6">
                     <div class="glass-card rounded-2xl p-6">
@@ -193,7 +183,6 @@
         </section>
     </main>
 
-    <!-- CLIENT MODAL -->
     <div id="clientModal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
         <div class="w-full max-w-lg glass-card rounded-2xl p-6 border border-slate-600/40">
             <div class="flex items-center justify-between mb-5">
@@ -214,7 +203,6 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
     const AppState = {
         auth: { isLoggedIn: false, attempts: 0, maxAttempts: 3, isLocked: false, validEmail: 'advisor@enomy.com', validPassword: 'Finance2026!' },
@@ -260,7 +248,6 @@
         document.getElementById('diagnosticLogs').innerHTML = ''; AppState.diagnosticLogs = []; logDiagnostic('Diagnostic logs cleared.', 'info');
     }
 
-    /* EFSM Authentication */
     function handleLogin() {
         if (AppState.auth.isLocked) return;
         const email = document.getElementById('loginEmail').value.trim();
@@ -291,7 +278,6 @@
         }
     }
 
-    /* Tab Switcher */
     function switchTab(tabId) {
         saveTabState(AppState.activeTab);
         AppState.activeTab = tabId;
@@ -315,7 +301,6 @@
         else if (t === 'clients') { renderClients(); }
     }
 
-    /* Currency Converter Logic */
     function getTieredFee(amt) { return amt > 2500 ? 0.015 : amt > 1500 ? 0.020 : amt > 500 ? 0.027 : 0.035; }
     function convertCurrency() {
         try {
@@ -350,7 +335,6 @@
         } catch (e) { logDiagnostic(`Conversion error: ${e.message}`, 'error'); }
     }
 
-    /* Savings Plan Logic */
     function onPlanChange() {
         const p = SAVINGS_PLANS[document.getElementById('savingsPlan').value];
         const lump = document.getElementById('initialLump');
@@ -418,7 +402,6 @@
         } catch (e) { logDiagnostic(`Savings calculation error: ${e.message}`, 'error'); }
     }
 
-    /* Client Database Logic (MySQL API + Cache Fallback) */
     let cachedClients = [];
     async function loadClients() {
         try {
@@ -486,7 +469,6 @@
         await renderClients();
     }
 
-    /* Diagnostics & Network Simulation */
     function simulateNetworkFailure() {
         AppState.isOffline = true;
         document.getElementById('offlineBanner').classList.remove('hidden');
